@@ -1,7 +1,7 @@
 <html>
   <head>
     <script>
-    if (window.location.pathname == "/") {
+    if (window.location.href.indexOf('https://bhoung.github.io') === 0) {
       window.location = "https://dl.dropboxusercontent.com/u/2129286/index.html";
     } else {
       window.location = "https://dl.dropboxusercontent.com/u/2129286" + window.location.pathname;
