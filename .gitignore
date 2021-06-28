@@ -8,5 +8,5 @@ Gemfile.lock
 *~
 .DS_Store
 .RHistory
-*.yml~
 *.html~
+*yml~
