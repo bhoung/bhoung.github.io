@@ -1,0 +1,8 @@
+1. Brooklyn nets performance varying by star players playing
+
+data:basketball-reference.com for team performance over regular season/playoffs
+
+2. Play by play data and player performance over the duration of a game
+data: python nba_api, which pulls data from the official nab website
+
+3. Get lineups from the play by play data

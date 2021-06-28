@@ -1,0 +1,180 @@
+---
+title: "'21 Brooklyn Nets performance in games missed by stars"
+layout: post
+categories:
+  - notebook
+tags:
+  - nba, sports
+output: 
+   #html_document
+  md_document:
+    variant: markdown_github+backtick_code_blocks
+    preserve_yaml: true
+    toc: false
+    fig_retina: 2
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r include=FALSE}
+library(rvest)
+library(cowplot)
+library(tidyverse)
+library(xml2)
+```
+
+
+```{r}
+roster <- "https://www.basketball-reference.com/teams/BRK/2021.html"
+
+html <- read_html(roster)
+tables <- html %>% html_nodes("table") %>% html_table()
+df <- tables[1] %>% data.frame()
+
+players <- html %>% html_nodes("table") %>% xml_find_all(".//a") %>% xml_attrs()
+gamelogs <- unlist(players)
+pgl <- gamelogs[grep("gamelog", gamelogs)]  %>% unique() %>% list() 
+pgl <- pgl[[1]]
+
+playoffs_pl <- pgl[c(1,2,3,4,6,9,10,14,12,15,18)]
+```
+
+```{r }
+
+irving <- "https://www.basketball-reference.com/players/i/irvinky01/gamelog/2021"
+harden <- "https://www.basketball-reference.com/players/h/hardeja01/gamelog/2021"
+durant <- "https://www.basketball-reference.com/players/d/duranke01/gamelog/2021"
+ 
+get_player_url <- function(path) {
+  paste("https://www.basketball-reference.com/",path,sep="")
+}
+
+player_urls <- unlist(lapply(FUN=get_player_url, playoffs_pl))
+
+get_data <- function(player_url) {
+  html <- read_html(player_url)
+  tables <- html %>% html_nodes("table") %>% html_table()
+  df <- tables[8] %>% data.frame()
+  return(df)
+}
+
+```
+
+```{r}
+
+for (p in player_urls) {
+   pname <- str_split(p, "/")[[1]][7]
+   data <- get_data(p)
+   assign(pname, data) 
+}
+```
+
+```{r}
+plist <- list()
+for (p in player_urls) {
+   pname <- str_split(p, "/")[[1]][7]
+   plist <- c(plist, pname)   # Add element to list
+}
+unlist(plist)
+
+df1 <- get_data(irving)
+df2 <- get_data(harden)
+df3 <- get_data(durant)
+
+```
+
+```{r}
+nets_games_url <- 'https://www.basketball-reference.com/teams/BRK/2021_games.html'
+html <- read_html(nets_games_url)
+tables <- html %>% html_nodes("table") %>% html_table()
+
+nets_regular_season <- tables[[1]] %>% data.frame()
+nets_playoffs <- tables[[2]] %>% data.frame()
+
+games <- nets_regular_season %>% select(G, Date, Var.6, Opponent, Var.8, Tm, Opp)
+names(games) <- c("G", "Date", "Home", "Opponent", "WinLoss", "Team", "Opp")
+```
+
+```{r}
+
+games$date <- apply(games, 1, FUN = function(x) {substr(x[c("Date")], 6, 20) })
+games$date <- as.Date(games$date, c("%B %d, %Y"))
+
+glimpse(games)
+
+games$Team <- as.integer(games$Team)
+games$Opp <- as.integer(games$Opp)
+
+games$diff <- games$Team - games$Opp
+```
+
+```{r warning=FALSE}
+hist(games$diff)
+games$home <- games$Home != '@'
+table(games$home)
+#qplot(games$date, games$diff)
+games %>% ggplot(.) + geom_point(aes(y=diff, x=date)) + facet_grid(home ~ .) + geom_smooth(aes(x=date, y=diff))
+```
+
+```{r}
+irving <- df1 %>% select(Rk, G)
+names(irving) <- c("Rk", "Irving")
+
+harden <- df2 %>% select(Rk, G)
+names(harden) <- c("Rk", "Harden")
+
+durant <- df3 %>% select(Rk, G)
+names(durant) <- c("Rk", "Durant")
+```
+
+
+```{r message=FALSE, warning=FALSE}
+m <- irving %>% left_join(harden, by=c("Rk"="Rk"))
+m2 <- m %>% left_join(durant, by=c("Rk"="Rk"))
+data <- m2 %>% filter(Rk != "Rk")
+nrow(data)
+
+data$Irving <- ifelse(is.na(data$Irving), "", data$Irving) 
+data$Harden <- ifelse(is.na(data$Harden), "", data$Harden) 
+data$Durant <- ifelse(is.na(data$Durant), "", data$Durant) 
+
+
+data$Irving <- data$Irving != ""
+data$Harden <- data$Harden != ""
+data$Durant <- data$Durant != ""
+
+data$i <- ifelse(data$Irving, "I", "") 
+data$h <- ifelse(data$Harden, "H", "") 
+data$d <- ifelse(data$Durant, "D", "") 
+
+data <- data %>% mutate(N_stars = Irving + Harden + Durant)
+
+data <- data %>% mutate(star_combo = paste(i, h, d, sep=""))
+
+dfm <- games %>% left_join(data, by=c("G"="Rk"))
+
+dfm %>% ggplot(.) + geom_point(aes(y=diff, x=date)) + facet_wrap(. ~ N_stars) + geom_smooth(aes(x=date, y=diff)) + theme_cowplot()
+
+dfm %>% group_by(N_stars) %>% summarise(mean(diff), sd(diff), length(diff))
+
+dfm %>% group_by(star_combo) %>% summarise(mean(diff), sd(diff), length(diff))
+
+dfm %>% ggplot(.) + geom_point(aes(y=diff, x=date)) + facet_wrap(. ~ star_combo) + geom_smooth(aes(x=date, y=diff)) + theme_cowplot()
+```
+
+```{r warning=FALSE}
+
+dfm %>% ggplot(.) + geom_histogram(aes(x=diff, fill=star_combo), binwidth = 5) + facet_wrap(. ~ star_combo) + theme_cowplot() + labs(x="margin", y="#games")
+
+```
+
+```{r warning=FALSE}
+
+dfm %>% ggplot(.) + geom_density(aes(x=diff, fill=star_combo), binwidth = 5) + facet_wrap(. ~ star_combo) + theme_cowplot() + labs(x="margin", y="#games", fill="Star Combo")
+
+```

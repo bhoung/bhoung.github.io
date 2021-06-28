@@ -1,0 +1,52 @@
+---
+title: "Basketball Reference"
+layout: post
+categories:
+  - notebook
+tags:
+  - nba, sports
+output: 
+  md_document:
+    variant: markdown_github+backtick_code_blocks
+    preserve_yaml: true
+    toc: false
+    fig_retina: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+
+```{r}
+library(rvest)
+library(tidyverse)
+
+html <- read_html("https://www.basketball-reference.com/players/w/westbru01/gamelog/2021")
+tables <- html %>% html_nodes("table") %>% html_table()
+
+df <- tables[8] %>% data.frame()
+
+```
+
+```{r}
+library(ggplot2)
+names(df)
+
+df$date <- as.Date(df$Date, c("%Y-%m-%d"))
+df$points <- as.integer(df$PTS)
+```
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+qplot(df$date, df$point)
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
