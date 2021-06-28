@@ -3,9 +3,10 @@
 .jekyll-cache
 .sass-cache
 _site
+_md
 Gemfile.lock
 *~
 .DS_Store
 .RHistory
+*.html~
 *yml~
-_md

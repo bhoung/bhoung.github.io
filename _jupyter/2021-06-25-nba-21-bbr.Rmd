@@ -1,0 +1,208 @@
+---
+title: "Basketball Reference"
+layout: post
+categories:
+  - notebook
+tags:
+  - nba, sports
+output: 
+   html_document
+#  md_document:
+#    variant: markdown_github+backtick_code_blocks
+#    preserve_yaml: true
+#    toc: false
+#    fig_retina: 2
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Compare '21 Brooklyn Nets team performance based on star players
+
+
+```{r include=FALSE}
+library(rvest)
+library(cowplot)
+library(tidyverse)
+library(xml2)
+library(stringi)
+```
+
+https://stackoverflow.com/questions/40616357/how-to-scrape-tables-inside-a-comment-tag-in-html-with-r
+
+https://stackoverflow.com/questions/49057868/extracting-text-within-tags-inside-html-comments-with-beautifulsoup
+
+```{r}
+roster <- "https://www.basketball-reference.com/teams/BRK/2021.html"
+
+html <- read_html(roster)
+tables <- html %>% html_nodes("table") %>% html_table()
+df <- tables[1] %>% data.frame()
+
+players <- html %>% html_nodes("table") %>% xml_find_all(".//a") %>% xml_attrs()
+gamelogs <- unlist(players)
+pgl <- gamelogs[grep("gamelog", gamelogs)]  %>% unique() %>% list() 
+pgl <- pgl[[1]]
+
+playoffs_pl <- pgl[c(1,2,3,4,6,9,10,14,12,15,18)]
+```
+
+```{r }
+
+get_player_url <- function(path) {
+  paste("https://www.basketball-reference.com/",path,sep="")
+}
+
+player_urls <- unlist(lapply(FUN=get_player_url, playoffs_pl))
+
+get_data <- function(player_url) {
+  source <- readLines(player_url)
+  src_text <- paste0(source, collapse = "")
+  table_regex <- as.character(unlist(stri_extract_all(src_text, regex='<table(.*?)/table>', omit_no_match = T, simplify = T)))
+  #table 9 is playoff table
+  html_parse2 <- read_html(table_regex[9])
+  tdf <- html_table(html_parse2) %>% data.frame()  
+  return(tdf)
+}
+
+```
+
+```{r}
+player_url <- player_urls[1]
+tdf <- get_data(player_url)
+tdf$date <- as.Date(tdf$Date, "%Y-%m-%d")
+tdf$min <- as.difftime(tdf$MP, format = "%M:%S", units = "mins")
+
+ggplot(tdf) + geom_point(aes(x=date, y=min))
+```
+
+
+```{r}
+library(stringr)
+for (p in player_urls) {
+   pname <- str_split(p, "/")[[1]][7]
+   data <- get_data(p)
+   assign(pname, data) 
+}
+```
+
+```{r}
+plist <- list()
+for (p in player_urls) {
+   pname <- str_split(p, "/")[[1]][7]
+   plist <- c(plist, pname)   # Add element to list
+}
+unlist(plist)
+
+```
+
+```{r}
+
+i = 1
+for (p in plist) {
+  
+  if (i == 1) {
+      data = get(p)
+      data$player <- p
+        
+  } else {
+      df = get(p)
+      df$player <- p
+      data = rbind(data, df) 
+  }
+  i = i + 1
+}
+  
+```
+
+```{r}
+table(data$player)
+nrow(data)
+```
+
+
+```{r}
+library(tidyverse)
+nets_games_url <- 'https://www.basketball-reference.com/teams/BRK/2021_games.html'
+html <- read_html(nets_games_url)
+tables <- html %>% html_nodes("table") %>% html_table()
+
+nets_regular_season <- tables[[1]] %>% data.frame()
+nets_playoffs <- tables[[2]] %>% data.frame()
+
+games <- nets_playoffs %>% select(G, Date, Var.6, Opponent, Var.8, Tm, Opp)
+names(games) <- c("G", "Date", "Home", "Opponent", "WinLoss", "Team", "Opp")
+```
+
+```{r}
+
+games$date <- apply(games, 1, FUN = function(x) {substr(x[c("Date")], 6, 20) })
+games$date <- as.Date(games$date, c("%B %d, %Y"))
+
+glimpse(games)
+
+games$Team <- as.integer(games$Team)
+games$Opp <- as.integer(games$Opp)
+
+games$diff <- games$Team - games$Opp
+```
+
+```{r warning=FALSE}
+hist(games$diff)
+games$home <- ifelse(games$Home != '@', 'HOME', 'AWAY')
+table(games$home)
+games %>% ggplot(.) + geom_point(aes(y=diff, x=date)) + facet_grid(home ~ .) + geom_smooth(aes(x=date, y=diff)) + labs(y="margin")
+```
+
+```{r}
+data$date <- as.Date(data$Date, format="%Y-%m-%d")
+dfm <- games %>% left_join(data, by=c("date"="date"))
+
+mp <- dfm %>% select(date, MP, player, WinLoss, diff, home, Opponent, `G.x`)
+mp$min <- as.difftime(mp$MP, format = "%M:%S", units = "mins")
+```
+
+```{r message=FALSE, warning=FALSE}
+library(cowplot)
+library(ggrepel)
+
+mp %>% filter(!is.na(player)) %>% ggplot(.) + geom_point(aes(x=date, y=min, colour=player)) + facet_grid(WinLoss ~ .) + theme_cowplot()
+
+mp %>% filter(!is.na(player)) %>% ggplot(.) + geom_line(aes(x=date, y=min, colour=player)) + facet_grid(home ~ .) + theme_cowplot()
+
+reduced_mins <- c("johnsty01", "claxtni01","jamesmi02","shamela01","greenje02") 
+
+mp %>% filter(!is.na(player) & !(player %in% reduced_mins)) %>% ggplot(.) + geom_line(aes(x=date, y=min, colour=player)) + theme_cowplot() + labs(y="minutes played")
+
+mp %>% filter(!is.na(player) & player %in% reduced_mins) %>% ggplot(.) + geom_line(aes(x=date, y=min, colour=player)) + theme_cowplot() + labs(y="minutes played")
+
+mp <- mp %>% group_by(Opponent, player) %>% arrange(date) %>% mutate(gm = row_number())
+
+p1 <- mp %>% filter(!is.na(player) & player %in% reduced_mins) %>% ggplot(.) + geom_line(aes(x=gm, y=min, colour=player)) + theme_cowplot() + labs(y="minutes played") + facet_grid(Opponent ~ .) + scale_x_discrete(limits=seq(1,7)) + labs(x="game") + theme(legend.position = "none")
+
+mp <- mp %>% mutate(pname = case_when(
+  player == "brownbr01" ~ "Brown",
+  player == "claxtni01" ~ "Claxton",
+  player == "duranke01" ~ "Durant",
+  player == "greenje02" ~ "Green",
+  player == "griffbl01" ~ "Griffin",
+  player == "hardeja01" ~ "Harden",
+  player == "harrijo01" ~ "Harris",
+  player == "irvinky01" ~ "Irving",
+  player == "jamesmi02" ~ "James",
+  player == "johnsty01" ~ "Johnston",
+  player == "shamela01" ~ "Shamet",
+))
+
+p1 <- mp %>% filter(!is.na(player) & !(player %in% reduced_mins)) %>% ggplot(.) + geom_col(aes(x=gm, y=(min/5), colour=pname, fill=pname)) + theme_cowplot() + labs(y="minutes played", colour="Player", fill="Player") + facet_grid(Opponent ~ .) + scale_x_discrete(limits=factor(seq(1,7)))
+
+p2 <- mp %>% filter(!is.na(player) & (player %in% reduced_mins)) %>% ggplot(.) + geom_col(aes(x=gm, y=(min/5), colour=pname, fill=pname)) + theme_cowplot() + labs(y="minutes played", colour="Player", fill="Player") + facet_grid(Opponent ~ .) + scale_x_discrete(limits=factor(seq(1,7)))
+
+mp %>% filter(!is.na(player) & !(player %in% reduced_mins)) %>% ggplot(.) + geom_line(aes(x=gm, y=min, colour=player)) + theme_cowplot() + labs(y="minutes played") + facet_grid(Opponent ~ .) + scale_x_discrete(limits=factor(seq(1,7))) + 
+ theme(legend.position = "none") + geom_text_repel(aes(x=gm, y=min, label=ifelse(gm == 1, player, "")))
+
+plot_grid(p1, p2, nrow=2, ncol=1)
+
+```
