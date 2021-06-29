@@ -1,5 +1,5 @@
 ---
-title: Minutes played by Nets 
+title: Minutes played by Nets, regular season
 layout: post
 categories:
   - posts

@@ -25,7 +25,7 @@ code: https://gist.github.com/bhoung/769ea023915bc7f6802f667249b54508
 <a href="https://www.youtube.com/watch?v=dl10lT14dOI"> <img src="/assets/images/sc1.png" alt="drawing" width="600"/>  </a>
 <br>
 
-<b>link to YouTube screencast #4 (2021-06-17) <a href="https://www.youtube.com/watch?v=ccpVqk9KUsU"> here <a> 
+<b>link to YouTube screencast #4 (2021-06-17) <a href="https://www.youtube.com/watch?v=ccpVqk9KUsU"> here </a></b> 
 <a href="https://www.youtube.com/watch?v=ccpVqk9KUsU"> <img src="/assets/images/sc1.png" alt="drawing" width="600"/>  </a>
 <br>
 
