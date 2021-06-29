@@ -17,7 +17,9 @@ output:
 
 Screencast #4 shows the minutes played by Nets in NBA regular season '21 against team win/loss and margin.
 
-<b>link to YouTube screencast #4 (2021-06-19) <a href="https://www.youtube.com/watch?v=Zdrv0gmIp90"> here <a> 
+code: https://gist.github.com/bhoung/406879882f21de87283ae2380a1994df
+
+<b>link to YouTube screencast #4 (2021-06-19) <a href="https://www.youtube.com/watch?v=Zdrv0gmIp90"> here </a> </b>
 <a href="https://www.youtube.com/watch?v=Zdrv0gmIp90"> <img src="/assets/images/sc4.jpeg" alt="drawing" width="600"/>  </a>
 <br>
 
