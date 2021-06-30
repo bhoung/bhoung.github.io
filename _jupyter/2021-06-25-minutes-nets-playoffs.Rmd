@@ -17,9 +17,8 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+#knitr::opts_chunk$set(fig.path = "")
 ```
-
-
 
 ```{r include=FALSE}
 library(rvest)
@@ -76,7 +75,7 @@ tdf <- get_data(player_url)
 tdf$date <- as.Date(tdf$Date, "%Y-%m-%d")
 tdf$min <- as.difftime(tdf$MP, format = "%M:%S", units = "mins")
 
-ggplot(tdf) + geom_point(aes(x=date, y=min))
+#ggplot(tdf) + geom_point(aes(x=date, y=min))
 ```
 
 
@@ -142,7 +141,7 @@ names(games) <- c("G", "Date", "Home", "Opponent", "WinLoss", "Team", "Opp")
 games$date <- apply(games, 1, FUN = function(x) {substr(x[c("Date")], 6, 20) })
 games$date <- as.Date(games$date, c("%B %d, %Y"))
 
-glimpse(games)
+#glimpse(games)
 
 games$Team <- as.integer(games$Team)
 games$Opp <- as.integer(games$Opp)
@@ -151,10 +150,10 @@ games$diff <- games$Team - games$Opp
 ```
 
 ```{r warning=FALSE, include=FALSE}
-hist(games$diff)
+#hist(games$diff)
 games$home <- ifelse(games$Home != '@', 'HOME', 'AWAY')
 table(games$home)
-games %>% ggplot(.) + geom_point(aes(y=diff, x=date)) + facet_grid(home ~ .) + geom_smooth(aes(x=date, y=diff)) + labs(y="margin")
+#games %>% ggplot(.) + geom_point(aes(y=diff, x=date)) + facet_grid(home ~ .) + geom_smooth(aes(x=date, y=diff)) + labs(y="margin")
 ```
 
 ```{r include=FALSE}

@@ -25,4 +25,11 @@ References:
     ## jamesmi02 johnsty01 shamela01 
     ##        12        12        12
 
-<img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-1.png" width="672" /><img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-2.png" width="672" /><img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-3.png" width="672" /><img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-4.png" width="672" /><img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-5.png" width="672" /><img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-6.png" width="672" /><img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-7.png" width="672" /><img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-8.png" width="672" />
+<img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-1.png" width="672" />
+<img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-2.png" width="672" />
+<img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-3.png" width="672" />
+<img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-4.png" width="672" />
+<img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-5.png" width="672" />
+<img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-6.png" width="672" />
+<img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-7.png" width="672" />
+<img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-8.png" width="672" />

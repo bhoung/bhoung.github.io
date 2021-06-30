@@ -17,8 +17,8 @@
 
 title: Brendan Houng
 author: Brendan Houng
-description: A place to share my miscellaneous experiments. 
-baseurl: "/" # the subpath of your site, e.g. /blog
+description: coding & data
+baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://bhoung.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 lang: en
 timezone: UTC

@@ -113,7 +113,7 @@ mp %>% filter(!is.na(player)) %>% ggplot(.) + geom_point(aes(x=date, y=min, colo
   facet_grid(WinLoss ~ .) + theme_cowplot()
 ```
 
-<img src="/assets/images/2021-06-19-nba-21-bbr_files/figure-markdown_github/unnamed-chunk-11-1.png" width="672" />
+<img src="/assets/images/2021-06-19-nba-21-bbr_files/figure-markdown_github/unnamed-chunk-11-1.png" width="672" alt="minutes played/win loss"/>
 
 ``` r
 mp %>% filter(!is.na(player)) %>% ggplot(.) + geom_point(aes(x=date, y=min, colour=player)) +
