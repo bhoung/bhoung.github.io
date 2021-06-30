@@ -15,9 +15,9 @@ output:
   
 ---
 
-References:
-<https://stackoverflow.com/questions/40616357/how-to-scrape-tables-inside-a-comment-tag-in-html-with-r>
-<https://stackoverflow.com/questions/49057868/extracting-text-within-tags-inside-html-comments-with-beautifulsoup>
+This notebook shows the minutes played by starters and bench Nets players in their two playoff series.
+
+code: https://gist.github.com/bhoung/3833c6afa438296c6c6dfe8964d20da7
 
     ## 
     ## brownbr01 claxtni01 duranke01 greenje02 griffbl01 hardeja01 harrijo01 irvinky01 
@@ -33,3 +33,9 @@ References:
 <img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-6.png" width="672" />
 <img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-7.png" width="672" />
 <img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-8.png" width="672" />
+
+References:
+
+<https://stackoverflow.com/questions/40616357/how-to-scrape-tables-inside-a-comment-tag-in-html-with-r>
+
+<https://stackoverflow.com/questions/49057868/extracting-text-within-tags-inside-html-comments-with-beautifulsoup>

@@ -15,9 +15,12 @@ output:
   
 ---
 
+This notebook shows the minutes played by starters and bench Nets players in their two playoff series.
+
+code: https://gist.github.com/bhoung/3833c6afa438296c6c6dfe8964d20da7
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-#knitr::opts_chunk$set(fig.path = "")
 ```
 
 ```{r include=FALSE}
@@ -28,11 +31,6 @@ library(xml2)
 library(stringi)
 ```
 
-References:
-
-https://stackoverflow.com/questions/40616357/how-to-scrape-tables-inside-a-comment-tag-in-html-with-r
-
-https://stackoverflow.com/questions/49057868/extracting-text-within-tags-inside-html-comments-with-beautifulsoup
 
 ```{r include=FALSE}
 roster <- "https://www.basketball-reference.com/teams/BRK/2021.html"
@@ -74,39 +72,28 @@ player_url <- player_urls[1]
 tdf <- get_data(player_url)
 tdf$date <- as.Date(tdf$Date, "%Y-%m-%d")
 tdf$min <- as.difftime(tdf$MP, format = "%M:%S", units = "mins")
-
-#ggplot(tdf) + geom_point(aes(x=date, y=min))
 ```
 
 
 ```{r include=FALSE}
 library(stringr)
-for (p in player_urls) {
-   pname <- str_split(p, "/")[[1]][7]
-   data <- get_data(p)
-   assign(pname, data) 
-}
-```
-
-```{r include=FALSE}
 plist <- list()
 for (p in player_urls) {
    pname <- str_split(p, "/")[[1]][7]
    plist <- c(plist, pname)   # Add element to list
+   data <- get_data(p)
+   assign(pname, data) 
 }
 unlist(plist)
-
 ```
 
 ```{r include=FALSE}
 
 i = 1
 for (p in plist) {
-  
   if (i == 1) {
       data = get(p)
       data$player <- p
-        
   } else {
       df = get(p)
       df$player <- p
@@ -119,7 +106,6 @@ for (p in plist) {
 
 ```{r echo=FALSE}
 table(data$player)
-#nrow(data)
 ```
 
 
@@ -150,10 +136,8 @@ games$diff <- games$Team - games$Opp
 ```
 
 ```{r warning=FALSE, include=FALSE}
-#hist(games$diff)
 games$home <- ifelse(games$Home != '@', 'HOME', 'AWAY')
 table(games$home)
-#games %>% ggplot(.) + geom_point(aes(y=diff, x=date)) + facet_grid(home ~ .) + geom_smooth(aes(x=date, y=diff)) + labs(y="margin")
 ```
 
 ```{r include=FALSE}
@@ -206,9 +190,13 @@ p2 <- mp %>% filter(!is.na(player) & (player %in% reduced_mins)) %>% ggplot(.) +
 mp %>% filter(!is.na(player) & !(player %in% reduced_mins)) %>% ggplot(.) + geom_line(aes(x=gm, y=min, colour=player)) + theme_cowplot() + labs(y="minutes played") + facet_grid(Opponent ~ .) + scale_x_discrete(limits=factor(seq(1,7))) + 
  theme(legend.position = "none") + geom_text_repel(aes(x=gm, y=min, label=ifelse(gm == 1, player, "")))
 
-#plot_grid(p1, p2, nrow=2, ncol=1)
 p1
-
 p2
+#plot_grid(p1, p2, nrow=2, ncol=1)
 
 ```
+References:
+
+https://stackoverflow.com/questions/40616357/how-to-scrape-tables-inside-a-comment-tag-in-html-with-r
+
+https://stackoverflow.com/questions/49057868/extracting-text-within-tags-inside-html-comments-with-beautifulsoup
