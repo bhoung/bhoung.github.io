@@ -22,14 +22,21 @@ script:
     pa11y-ci --sitemap http://localhost:4000/whiteglass/sitemap.xml && \
     kill -9 "$(cat jekyll.pid)" && \
     rm -f jekyll.pid
+
+# need to build from another branch, can't build and push to same branch: master
+#The content of your current master branch should goes to source. You can just rename the branch and push by git branch -m source, git push origin source.
+#Travis CI will push to master, but you need to create it. Try git checkout --orphan master, git commit --allow-empty -m "Initial commit", git push -f origin master.
+#https://github.com/yous/whiteglass/issues/18
+#https://github.com/yous/whiteglass/issues/13
 branches:
   only:
-    - master
+    - source
 deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
   keep_history: true
   local_dir: _site
+  #target_branch: gh-pages
   on:
     branch: master
