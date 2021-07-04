@@ -18,16 +18,17 @@ output:
 
 In screencasts #3 & #4 I plot the Nets team performance by the combination of stars that take the court in '21 NBA regular season.
 
-code: https://gist.github.com/bhoung/769ea023915bc7f6802f667249b54508
+code: <a href="https://gist.github.com/bhoung/769ea023915bc7f6802f667249b54508"> https://gist.github.com/bhoung/769ea023915bc7f6802f667249b54508 </a>
 
-<b>link to YouTube screencast #3 (2021-06-14) <a href="https://www.youtube.com/watch?v=dl10lT14dOI"> here </a> </b> 
 <!--[![jekyll jupyter notebook r markdown screencast](https://img.youtube.com/vi/dl10lT14dOI/0.jpg)]()-->
 <a href="https://www.youtube.com/watch?v=dl10lT14dOI"> <img src="/assets/images/sc1.png" alt="drawing" width="600"/>  </a>
 <br>
+<b>link to YouTube screencast #3 (2021-06-14) <a href="https://www.youtube.com/watch?v=dl10lT14dOI"> here </a> </b> 
 
-<b>link to YouTube screencast #4 (2021-06-17) <a href="https://www.youtube.com/watch?v=ccpVqk9KUsU"> here </a></b> 
 <a href="https://www.youtube.com/watch?v=ccpVqk9KUsU"> <img src="/assets/images/sc1.png" alt="drawing" width="600"/>  </a>
 <br>
+<b>link to YouTube screencast #4 (2021-06-17) <a href="https://www.youtube.com/watch?v=ccpVqk9KUsU"> here </a></b> 
+
 
 ``` r
 dfm %>% group_by(N_stars) %>% summarise(mean(diff), sd(diff), length(diff))

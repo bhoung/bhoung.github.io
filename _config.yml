@@ -17,7 +17,7 @@
 
 title: Brendan Houng
 author: Brendan Houng
-description: coding & data
+description: data & code
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://bhoung.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 lang: en

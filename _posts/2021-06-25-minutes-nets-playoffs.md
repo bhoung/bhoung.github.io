@@ -17,7 +17,16 @@ output:
 
 This notebook shows the minutes played by starters and bench Nets players in their two playoff series.
 
-code: https://gist.github.com/bhoung/3833c6afa438296c6c6dfe8964d20da7
+The hypothesis for looking at minutes played is that: did the cumulative effect of the number of minutes played by K. Durant lead to his fatigue
+(which could be measured by something like shooting percentage) in game 7 of the second series?
+<br><br>
+This analysis only looks on the minutes played side of the relationship, whereas a measure of player performance would also be required to answer the question of fatigue. 
+
+code: <a href="https://gist.github.com/bhoung/3833c6afa438296c6c6dfe8964d20da7"> https://gist.github.com/bhoung/3833c6afa438296c6c6dfe8964d20da7 </a>
+
+<a href="https://www.youtube.com/watch?v=m1rjFERnDWo"> <img src="/assets/images/sc5.jpeg" alt="drawing" width="600"/>  </a>
+<br>
+<b>link to YouTube screencast #5 (2021-06-25) <a href="https://www.youtube.com/watch?v=m1rjFERnDWo"> here </a> </b>
 
     ## 
     ## brownbr01 claxtni01 duranke01 greenje02 griffbl01 hardeja01 harrijo01 irvinky01 
