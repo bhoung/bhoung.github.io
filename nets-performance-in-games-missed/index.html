@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-site-verification" content="NRV_s2OxsLZbYJxcMjzaVB1ReV1ISssIqlgw1mQ5-Dc" />
+  
+  
+  
+  <title>Nets performance in games missed by stars</title>
+  <meta name="description" content="In sceencast #2 I ask how the Nets performed in the regular NBA season depending on how many of their stars played. code: https://gist.github.com/bhoung/769ea023915bc7f6802f667249b54508 link to YouTube screencast #2 here R Markdown library(rvest) library(tidyverse) irving &amp;lt;- &quot;https://www.basketball-reference.com/players/i/irvinky01/gamelog/2021&quot; harden &amp;lt;- &quot;https://www.basketball-reference.com/players/h/hardeja01/gamelog/2021&quot; durant &amp;lt;- &quot;https://www.basketball-reference.com/players/d/duranke01/gamelog/2021&quot; get_data &amp;lt;- function(player_url) { html &amp;lt;- read_html(player_url) tables &amp;lt;- html %&amp;gt;% html_nodes(&quot;table&quot;) %&amp;gt;% html_table() df &amp;lt;- tables[8] %&amp;gt;% data.frame() return(df) } df1 &amp;lt;- get_data(irving) df2 &amp;lt;- get_data(harden) df3 &amp;lt;- get_data(durant) nets_games_url &amp;lt;- &#39;https://www.basketball-reference.com/teams/BRK/2021_games.html&#39; html &amp;lt;- read_html(nets_games_url) tables &amp;lt;- html %&amp;gt;% html_nodes(&quot;table&quot;) %&amp;gt;% html_table() nets_regular_season &amp;lt;- tables[[1]] %&amp;gt;% data.frame() nets_playoffs &amp;lt;- tables[[2]] %&amp;gt;% data.frame() games &amp;lt;- nets_regular_season %&amp;gt;% select(G, Date, Var.6, Opponent, Var.8, Tm, Opp) names(games) &amp;lt;- c(&quot;G&quot;, &quot;Date&quot;, &quot;Home&quot;, &quot;Opponent&quot;, &quot;WinLoss&quot;, &quot;Team&quot;, &quot;Opp&quot;) games$date &amp;lt;- apply(games, 1, FUN = function(x) {substr(x[c(&quot;Date&quot;)], 6, 20) }) games$date &amp;lt;- as.Date(games$date, c(&quot;%B %d, %Y&quot;)) glimpse(games) ## Rows: 75 ## Columns: 8 ## $ G &amp;lt;chr&amp;gt; &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;, &quot;10&quot;, &quot;11&quot;, &quot;12&quot;… ## $ Date &amp;lt;chr&amp;gt; &quot;Tue, Dec 22, 2020&quot;, &quot;Fri, Dec 25, 2020&quot;, &quot;Sun, Dec 27, 2020&quot;… ## $ Home &amp;lt;chr&amp;gt; &quot;&quot;, &quot;@&quot;, &quot;@&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;@&quot;, &quot;&quot;, &quot;&quot;, &quot;@&quot;, &quot;&quot;, &quot;… ## $ Opponent &amp;lt;chr&amp;gt; &quot;Golden State Warriors&quot;, &quot;Boston Celtics&quot;, &quot;Charlotte Hornets… ## $ WinLoss &amp;lt;chr&amp;gt; &quot;W&quot;, &quot;W&quot;, &quot;L&quot;, &quot;L&quot;, &quot;W&quot;, &quot;L&quot;, &quot;L&quot;, &quot;W&quot;, &quot;W&quot;, &quot;L&quot;, &quot;L&quot;, &quot;W&quot;, &quot;… ## $ Team &amp;lt;chr&amp;gt; &quot;125&quot;, &quot;123&quot;, &quot;104&quot;, &quot;111&quot;, &quot;145&quot;, &quot;96&quot;, &quot;122&quot;, &quot;130&quot;, &quot;122&quot;,… ## $ Opp &amp;lt;chr&amp;gt; &quot;99&quot;, &quot;95&quot;, &quot;106&quot;, &quot;116&quot;, &quot;141&quot;, &quot;114&quot;, &quot;123&quot;, &quot;96&quot;, &quot;109&quot;, &quot;… ## $ date &amp;lt;date&amp;gt; 2020-12-22, 2020-12-25, 2020-12-27, 2020-12-28, 2020-12-30, … games$Team &amp;lt;- as.integer(games$Team) games$Opp &amp;lt;- as.integer(games$Opp) games$diff &amp;lt;- games$Team - games$Opp hist(games$diff) games$home &amp;lt;- games$Home != &#39;@&#39; table(games$home) ## ## FALSE TRUE ## 36 39 games %&amp;gt;% ggplot(.) + geom_point(aes(y=diff, x=date)) + facet_grid(home ~ .) + geom_smooth(aes(x=date, y=diff)) irving &amp;lt;- df1 %&amp;gt;% select(Rk, G) names(irving) &amp;lt;- c(&quot;Rk&quot;, &quot;Irving&quot;) harden &amp;lt;- df2 %&amp;gt;% select(Rk, G) names(harden) &amp;lt;- c(&quot;Rk&quot;, &quot;Harden&quot;) durant &amp;lt;- df3 %&amp;gt;% select(Rk, G) names(durant) &amp;lt;- c(&quot;Rk&quot;, &quot;Durant&quot;) m &amp;lt;- irving %&amp;gt;% left_join(harden, by=c(&quot;Rk&quot;=&quot;Rk&quot;)) m2 &amp;lt;- m %&amp;gt;% left_join(durant, by=c(&quot;Rk&quot;=&quot;Rk&quot;)) data &amp;lt;- m2 %&amp;gt;% filter(Rk != &quot;Rk&quot;) nrow(data) ## [1] 72 data$Irving &amp;lt;- ifelse(is.na(data$Irving), &quot;&quot;, data$Irving) data$Harden &amp;lt;- ifelse(is.na(data$Harden), &quot;&quot;, data$Harden) data$Durant &amp;lt;- ifelse(is.na(data$Durant), &quot;&quot;, data$Durant) data$Irving &amp;lt;- data$Irving != &quot;&quot; data$Harden &amp;lt;- data$Harden != &quot;&quot; data$Durant &amp;lt;- data$Durant != &quot;&quot; data$i &amp;lt;- ifelse(data$Irving, &quot;I&quot;, &quot;&quot;) data$h &amp;lt;- ifelse(data$Harden, &quot;H&quot;, &quot;&quot;) data$d &amp;lt;- ifelse(data$Durant, &quot;D&quot;, &quot;&quot;) data &amp;lt;- data %&amp;gt;% mutate(N_stars = Irving + Harden + Durant) data &amp;lt;- data %&amp;gt;% mutate(star_combo = paste(i, h, d, sep=&quot;&quot;)) dfm &amp;lt;- games %&amp;gt;% left_join(data, by=c(&quot;G&quot;=&quot;Rk&quot;)) dfm %&amp;gt;% ggplot(.) + geom_point(aes(y=diff, x=date)) + facet_wrap(. ~ N_stars) + geom_smooth(aes(x=date, y=diff))">
+  
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="https://bhoung.github.io/nets-performance-in-games-missed/">
+  
+  
+  <link rel="alternate" type="application/rss+xml" title="Brendan Houng" href="https://bhoung.github.io/feed.xml">
+
+  
+
+  
+  <meta property="og:title" content="Nets performance in games missed by stars">
+  <meta property="og:site_name" content="Brendan Houng">
+  <meta property="og:url" content="https://bhoung.github.io/nets-performance-in-games-missed/">
+  <meta property="og:description" content="In sceencast #2 I ask how the Nets performed in the regular NBA season depending on how many of their stars played. code: https://gist.github.com/bhoung/769ea023915bc7f6802f667249b54508 link to YouTube screencast #2 here R Markdown library(rvest) library(tidyverse) irving &amp;lt;- &quot;https://www.basketball-reference.com/players/i/irvinky01/gamelog/2021&quot; harden &amp;lt;- &quot;https://www.basketball-reference.com/players/h/hardeja01/gamelog/2021&quot; durant &amp;lt;- &quot;https://www.basketball-reference.com/players/d/duranke01/gamelog/2021&quot; get_data &amp;lt;- function(player_url) { html &amp;lt;- read_html(player_url) tables &amp;lt;- html %&amp;gt;% html_nodes(&quot;table&quot;) %&amp;gt;% html_table() df &amp;lt;- tables[8] %&amp;gt;% data.frame() return(df) } df1 &amp;lt;- get_data(irving) df2 &amp;lt;- get_data(harden) df3 &amp;lt;- get_data(durant) nets_games_url &amp;lt;- &#39;https://www.basketball-reference.com/teams/BRK/2021_games.html&#39; html &amp;lt;- read_html(nets_games_url) tables &amp;lt;- html %&amp;gt;% html_nodes(&quot;table&quot;) %&amp;gt;% html_table() nets_regular_season &amp;lt;- tables[[1]] %&amp;gt;% data.frame() nets_playoffs &amp;lt;- tables[[2]] %&amp;gt;% data.frame() games &amp;lt;- nets_regular_season %&amp;gt;% select(G, Date, Var.6, Opponent, Var.8, Tm, Opp) names(games) &amp;lt;- c(&quot;G&quot;, &quot;Date&quot;, &quot;Home&quot;, &quot;Opponent&quot;, &quot;WinLoss&quot;, &quot;Team&quot;, &quot;Opp&quot;) games$date &amp;lt;- apply(games, 1, FUN = function(x) {substr(x[c(&quot;Date&quot;)], 6, 20) }) games$date &amp;lt;- as.Date(games$date, c(&quot;%B %d, %Y&quot;)) glimpse(games) ## Rows: 75 ## Columns: 8 ## $ G &amp;lt;chr&amp;gt; &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;, &quot;10&quot;, &quot;11&quot;, &quot;12&quot;… ## $ Date &amp;lt;chr&amp;gt; &quot;Tue, Dec 22, 2020&quot;, &quot;Fri, Dec 25, 2020&quot;, &quot;Sun, Dec 27, 2020&quot;… ## $ Home &amp;lt;chr&amp;gt; &quot;&quot;, &quot;@&quot;, &quot;@&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;@&quot;, &quot;&quot;, &quot;&quot;, &quot;@&quot;, &quot;&quot;, &quot;… ## $ Opponent &amp;lt;chr&amp;gt; &quot;Golden State Warriors&quot;, &quot;Boston Celtics&quot;, &quot;Charlotte Hornets… ## $ WinLoss &amp;lt;chr&amp;gt; &quot;W&quot;, &quot;W&quot;, &quot;L&quot;, &quot;L&quot;, &quot;W&quot;, &quot;L&quot;, &quot;L&quot;, &quot;W&quot;, &quot;W&quot;, &quot;L&quot;, &quot;L&quot;, &quot;W&quot;, &quot;… ## $ Team &amp;lt;chr&amp;gt; &quot;125&quot;, &quot;123&quot;, &quot;104&quot;, &quot;111&quot;, &quot;145&quot;, &quot;96&quot;, &quot;122&quot;, &quot;130&quot;, &quot;122&quot;,… ## $ Opp &amp;lt;chr&amp;gt; &quot;99&quot;, &quot;95&quot;, &quot;106&quot;, &quot;116&quot;, &quot;141&quot;, &quot;114&quot;, &quot;123&quot;, &quot;96&quot;, &quot;109&quot;, &quot;… ## $ date &amp;lt;date&amp;gt; 2020-12-22, 2020-12-25, 2020-12-27, 2020-12-28, 2020-12-30, … games$Team &amp;lt;- as.integer(games$Team) games$Opp &amp;lt;- as.integer(games$Opp) games$diff &amp;lt;- games$Team - games$Opp hist(games$diff) games$home &amp;lt;- games$Home != &#39;@&#39; table(games$home) ## ## FALSE TRUE ## 36 39 games %&amp;gt;% ggplot(.) + geom_point(aes(y=diff, x=date)) + facet_grid(home ~ .) + geom_smooth(aes(x=date, y=diff)) irving &amp;lt;- df1 %&amp;gt;% select(Rk, G) names(irving) &amp;lt;- c(&quot;Rk&quot;, &quot;Irving&quot;) harden &amp;lt;- df2 %&amp;gt;% select(Rk, G) names(harden) &amp;lt;- c(&quot;Rk&quot;, &quot;Harden&quot;) durant &amp;lt;- df3 %&amp;gt;% select(Rk, G) names(durant) &amp;lt;- c(&quot;Rk&quot;, &quot;Durant&quot;) m &amp;lt;- irving %&amp;gt;% left_join(harden, by=c(&quot;Rk&quot;=&quot;Rk&quot;)) m2 &amp;lt;- m %&amp;gt;% left_join(durant, by=c(&quot;Rk&quot;=&quot;Rk&quot;)) data &amp;lt;- m2 %&amp;gt;% filter(Rk != &quot;Rk&quot;) nrow(data) ## [1] 72 data$Irving &amp;lt;- ifelse(is.na(data$Irving), &quot;&quot;, data$Irving) data$Harden &amp;lt;- ifelse(is.na(data$Harden), &quot;&quot;, data$Harden) data$Durant &amp;lt;- ifelse(is.na(data$Durant), &quot;&quot;, data$Durant) data$Irving &amp;lt;- data$Irving != &quot;&quot; data$Harden &amp;lt;- data$Harden != &quot;&quot; data$Durant &amp;lt;- data$Durant != &quot;&quot; data$i &amp;lt;- ifelse(data$Irving, &quot;I&quot;, &quot;&quot;) data$h &amp;lt;- ifelse(data$Harden, &quot;H&quot;, &quot;&quot;) data$d &amp;lt;- ifelse(data$Durant, &quot;D&quot;, &quot;&quot;) data &amp;lt;- data %&amp;gt;% mutate(N_stars = Irving + Harden + Durant) data &amp;lt;- data %&amp;gt;% mutate(star_combo = paste(i, h, d, sep=&quot;&quot;)) dfm &amp;lt;- games %&amp;gt;% left_join(data, by=c(&quot;G&quot;=&quot;Rk&quot;)) dfm %&amp;gt;% ggplot(.) + geom_point(aes(y=diff, x=date)) + facet_wrap(. ~ N_stars) + geom_smooth(aes(x=date, y=diff))">
+  
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="brendanhoung">
+  <meta name="twitter:title" content="Nets performance in games missed by stars">
+  <meta name="twitter:description" content="In sceencast #2 I ask how the Nets performed in the regular NBA season depending on how many of their stars played. code: https://gist.github.com/bhoung/769ea023915bc7f6802f667249b54508 link to You...">
+  
+    <meta name="twitter:creator" content="brendanhoung">
+  
+  
+
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+
+  
+  <!-- Google Analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-28923849-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+
+
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Brendan Houng</a>
+
+    <nav class="site-nav">
+      
+        
+        <a class="page-link" href="">Home</a>
+      
+        
+        <a class="page-link" href="/motivation">Motivation</a>
+      
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    
+      <h1 class="post-title" itemprop="name headline">Nets performance in games missed by stars</h1>
+    
+    <p class="post-meta"><time datetime="2021-06-06T00:00:00+00:00" itemprop="datePublished">Jun 6, 2021</time>
+    <!-- •
+  
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        <a href="/posts/">posts</a>
+      
+    
+      
+    
+  
+
+-->
+    </p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>In sceencast #2 I ask how the Nets performed in the regular NBA season depending on how many of their
+stars played.</p>
+
+<p>code: <a href="https://gist.github.com/bhoung/769ea023915bc7f6802f667249b54508"> https://gist.github.com/bhoung/769ea023915bc7f6802f667249b54508 </a></p>
+
+<p><b>link to YouTube screencast #2 <a href="https://www.youtube.com/watch?v=AM-sty4wSKo"> here </a> </b>
+<a href="https://www.youtube.com/watch?v=AM-sty4wSKo"> <img src="/assets/images/sc2.jpeg" alt="drawing" width="600" />  </a>
+<br /></p>
+
+<h2>R Markdown</h2>
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">rvest</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">irving</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"https://www.basketball-reference.com/players/i/irvinky01/gamelog/2021"</span><span class="w">
+</span><span class="n">harden</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"https://www.basketball-reference.com/players/h/hardeja01/gamelog/2021"</span><span class="w">
+</span><span class="n">durant</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"https://www.basketball-reference.com/players/d/duranke01/gamelog/2021"</span><span class="w">
+  
+</span><span class="n">get_data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">player_url</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">html</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read_html</span><span class="p">(</span><span class="n">player_url</span><span class="p">)</span><span class="w">
+  </span><span class="n">tables</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">html</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">html_nodes</span><span class="p">(</span><span class="s2">"table"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">html_table</span><span class="p">()</span><span class="w">
+  </span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tables</span><span class="p">[</span><span class="m">8</span><span class="p">]</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">data.frame</span><span class="p">()</span><span class="w">
+  </span><span class="nf">return</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_data</span><span class="p">(</span><span class="n">irving</span><span class="p">)</span><span class="w">
+</span><span class="n">df2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_data</span><span class="p">(</span><span class="n">harden</span><span class="p">)</span><span class="w">
+</span><span class="n">df3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_data</span><span class="p">(</span><span class="n">durant</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">nets_games_url</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s1">'https://www.basketball-reference.com/teams/BRK/2021_games.html'</span><span class="w">
+</span><span class="n">html</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read_html</span><span class="p">(</span><span class="n">nets_games_url</span><span class="p">)</span><span class="w">
+</span><span class="n">tables</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">html</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">html_nodes</span><span class="p">(</span><span class="s2">"table"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">html_table</span><span class="p">()</span><span class="w">
+
+</span><span class="n">nets_regular_season</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tables</span><span class="p">[[</span><span class="m">1</span><span class="p">]]</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">data.frame</span><span class="p">()</span><span class="w">
+</span><span class="n">nets_playoffs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tables</span><span class="p">[[</span><span class="m">2</span><span class="p">]]</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">data.frame</span><span class="p">()</span><span class="w">
+
+</span><span class="n">games</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">nets_regular_season</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">select</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="w"> </span><span class="n">Date</span><span class="p">,</span><span class="w"> </span><span class="n">Var.6</span><span class="p">,</span><span class="w"> </span><span class="n">Opponent</span><span class="p">,</span><span class="w"> </span><span class="n">Var.8</span><span class="p">,</span><span class="w"> </span><span class="n">Tm</span><span class="p">,</span><span class="w"> </span><span class="n">Opp</span><span class="p">)</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">games</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"G"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Date"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Home"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Opponent"</span><span class="p">,</span><span class="w"> </span><span class="s2">"WinLoss"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Team"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Opp"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">games</span><span class="o">$</span><span class="n">date</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">apply</span><span class="p">(</span><span class="n">games</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">FUN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="n">substr</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="nf">c</span><span class="p">(</span><span class="s2">"Date"</span><span class="p">)],</span><span class="w"> </span><span class="m">6</span><span class="p">,</span><span class="w"> </span><span class="m">20</span><span class="p">)</span><span class="w"> </span><span class="p">})</span><span class="w">
+</span><span class="n">games</span><span class="o">$</span><span class="n">date</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.Date</span><span class="p">(</span><span class="n">games</span><span class="o">$</span><span class="n">date</span><span class="p">,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"%B %d, %Y"</span><span class="p">))</span><span class="w">
+
+</span><span class="n">glimpse</span><span class="p">(</span><span class="n">games</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Rows: 75
+## Columns: 8
+## $ G        &lt;chr&gt; "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"…
+## $ Date     &lt;chr&gt; "Tue, Dec 22, 2020", "Fri, Dec 25, 2020", "Sun, Dec 27, 2020"…
+## $ Home     &lt;chr&gt; "", "@", "@", "", "", "", "", "", "", "@", "", "", "@", "", "…
+## $ Opponent &lt;chr&gt; "Golden State Warriors", "Boston Celtics", "Charlotte Hornets…
+## $ WinLoss  &lt;chr&gt; "W", "W", "L", "L", "W", "L", "L", "W", "W", "L", "L", "W", "…
+## $ Team     &lt;chr&gt; "125", "123", "104", "111", "145", "96", "122", "130", "122",…
+## $ Opp      &lt;chr&gt; "99", "95", "106", "116", "141", "114", "123", "96", "109", "…
+## $ date     &lt;date&gt; 2020-12-22, 2020-12-25, 2020-12-27, 2020-12-28, 2020-12-30, …
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">games</span><span class="o">$</span><span class="n">Team</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.integer</span><span class="p">(</span><span class="n">games</span><span class="o">$</span><span class="n">Team</span><span class="p">)</span><span class="w">
+</span><span class="n">games</span><span class="o">$</span><span class="n">Opp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.integer</span><span class="p">(</span><span class="n">games</span><span class="o">$</span><span class="n">Opp</span><span class="p">)</span><span class="w">
+</span><span class="n">games</span><span class="o">$</span><span class="n">diff</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">games</span><span class="o">$</span><span class="n">Team</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">games</span><span class="o">$</span><span class="n">Opp</span><span class="w">
+</span><span class="n">hist</span><span class="p">(</span><span class="n">games</span><span class="o">$</span><span class="n">diff</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/2021-06-14-nba-21-bbr_files/figure-markdown_github/unnamed-chunk-5-1.png" width="672" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">games</span><span class="o">$</span><span class="n">home</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">games</span><span class="o">$</span><span class="n">Home</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s1">'@'</span><span class="w">
+</span><span class="n">table</span><span class="p">(</span><span class="n">games</span><span class="o">$</span><span class="n">home</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## FALSE  TRUE 
+##    36    39
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">games</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_point</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">diff</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="n">date</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">facet_grid</span><span class="p">(</span><span class="n">home</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_smooth</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">date</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">diff</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+<p><img src="/assets/images/2021-06-14-nba-21-bbr_files/figure-markdown_github/unnamed-chunk-5-2.png" width="672" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">irving</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df1</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">select</span><span class="p">(</span><span class="n">Rk</span><span class="p">,</span><span class="w"> </span><span class="n">G</span><span class="p">)</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">irving</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Rk"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Irving"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">harden</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df2</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">select</span><span class="p">(</span><span class="n">Rk</span><span class="p">,</span><span class="w"> </span><span class="n">G</span><span class="p">)</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">harden</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Rk"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Harden"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">durant</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df3</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">select</span><span class="p">(</span><span class="n">Rk</span><span class="p">,</span><span class="w"> </span><span class="n">G</span><span class="p">)</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">durant</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Rk"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Durant"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">m</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">irving</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">left_join</span><span class="p">(</span><span class="n">harden</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s2">"Rk"</span><span class="o">=</span><span class="s2">"Rk"</span><span class="p">))</span><span class="w">
+</span><span class="n">m2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">left_join</span><span class="p">(</span><span class="n">durant</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s2">"Rk"</span><span class="o">=</span><span class="s2">"Rk"</span><span class="p">))</span><span class="w">
+</span><span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">m2</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="n">Rk</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s2">"Rk"</span><span class="p">)</span><span class="w">
+</span><span class="n">nrow</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] 72
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">data</span><span class="o">$</span><span class="n">Irving</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ifelse</span><span class="p">(</span><span class="nf">is.na</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">Irving</span><span class="p">),</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">Irving</span><span class="p">)</span><span class="w"> 
+</span><span class="n">data</span><span class="o">$</span><span class="n">Harden</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ifelse</span><span class="p">(</span><span class="nf">is.na</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">Harden</span><span class="p">),</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">Harden</span><span class="p">)</span><span class="w"> 
+</span><span class="n">data</span><span class="o">$</span><span class="n">Durant</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ifelse</span><span class="p">(</span><span class="nf">is.na</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">Durant</span><span class="p">),</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">Durant</span><span class="p">)</span><span class="w"> 
+
+
+</span><span class="n">data</span><span class="o">$</span><span class="n">Irving</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">Irving</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="n">data</span><span class="o">$</span><span class="n">Harden</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">Harden</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="n">data</span><span class="o">$</span><span class="n">Durant</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">Durant</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+
+</span><span class="n">data</span><span class="o">$</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ifelse</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">Irving</span><span class="p">,</span><span class="w"> </span><span class="s2">"I"</span><span class="p">,</span><span class="w"> </span><span class="s2">""</span><span class="p">)</span><span class="w"> 
+</span><span class="n">data</span><span class="o">$</span><span class="n">h</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ifelse</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">Harden</span><span class="p">,</span><span class="w"> </span><span class="s2">"H"</span><span class="p">,</span><span class="w"> </span><span class="s2">""</span><span class="p">)</span><span class="w"> 
+</span><span class="n">data</span><span class="o">$</span><span class="n">d</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ifelse</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">Durant</span><span class="p">,</span><span class="w"> </span><span class="s2">"D"</span><span class="p">,</span><span class="w"> </span><span class="s2">""</span><span class="p">)</span><span class="w"> 
+
+</span><span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">mutate</span><span class="p">(</span><span class="n">N_stars</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Irving</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Harden</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Durant</span><span class="p">)</span><span class="w">
+
+</span><span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">mutate</span><span class="p">(</span><span class="n">star_combo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">paste</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">h</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s2">""</span><span class="p">))</span><span class="w">
+
+</span><span class="n">dfm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">games</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">left_join</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s2">"G"</span><span class="o">=</span><span class="s2">"Rk"</span><span class="p">))</span><span class="w">
+
+</span><span class="n">dfm</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_point</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">diff</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="n">date</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">facet_wrap</span><span class="p">(</span><span class="n">.</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">N_stars</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_smooth</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">date</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">diff</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/2021-06-14-nba-21-bbr_files/figure-markdown_github/unnamed-chunk-7-1.png" width="672" /></p>
+
+
+  </div>
+
+  
+    <div class="post-comments" itemprop="comment">
+      <hr />
+<script
+  async
+  src="https://utteranc.es/client.js"
+  repo="bhoung/bhoung.github.io"
+  issue-term="title"
+  theme="github-light"
+  crossorigin="anonymous"
+></script>
+    </div>
+  
+
+</article>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <p>
+      
+
+&copy; Brendan Houng - Powered by <a href="https://jekyllrb.com">Jekyll</a> &amp; <a href="https://github.com/yous/whiteglass">whiteglass</a> - Subscribe via <a href="https://bhoung.github.io/feed.xml">RSS</a>
+<br>
+<br>
+<a href="https://github.com/bhoung/"> github </a>
+
+
+
+    </p>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
