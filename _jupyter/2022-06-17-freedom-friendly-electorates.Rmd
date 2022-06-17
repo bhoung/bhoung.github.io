@@ -1,0 +1,269 @@
+---
+title: "Results by electorate for the freedom friendly parties; sneak peak at the Victorian election"
+layout: post
+categories:
+  - posts
+tags:
+  - australian politics
+  - qgis
+#always_allow_html: true
+output:
+  #html_document
+  md_document:
+    variant: markdown_github+backtick_code_blocks
+    preserve_yaml: true
+    toc: false
+    fig_retina: 2
+
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+#install.packages('RPostgreSQL')
+#install.packages('RPostgres')
+#install.packages("kableExtra")
+
+```
+
+
+```{r include=FALSE}
+library(cowplot)
+library(RPostgreSQL)
+library(RPostgres)
+library(DBI)
+library(tidyverse)
+library(kableExtra)
+library(maptools)
+```
+
+```{r include=FALSE}
+
+db <- 'brendan'  #provide the name of your db
+host_db <- 'localhost' #i.e. # i.e. 'ec2-54-83-201-96.compute-1.amazonaws.com'  
+db_port <- '5432'  # or any other port specified by the DBA
+db_user <-  'brendan' 
+db_password <- '' 
+con <- dbConnect(RPostgres::Postgres(), dbname = db, host=host_db, port=db_port, user=db_user)  
+```
+
+
+```{r}
+q1 = "
+select row_number() over (order by ffmp_perc desc) id,
+       *, upper(divisionnm) div
+from (
+select divisionnm,  
+       max(divisionid) div_id,
+       max(stateab) state,
+       max(n_div) n_poll,
+       sum(n) n_ffmp,
+       100 * sum(n) / max(n_div) ffmp_perc
+from (
+select pollingplace,  
+       divisionnm,
+       divisionid,
+       stateab, 
+       partyab,
+       surname,
+       ordinaryvotes n,
+       sum(ordinaryvotes) over (partition by divisionid) n_div,
+       100 * ordinaryvotes / sum(nullif(ordinaryvotes, 0)) over (partition by divisionid) ffmp_perc       
+from polling
+) x
+where partyab in ('UAPP', 'ON', 'LDP')
+  and ffmp_perc is not null
+group by x.divisionnm
+order by ffmp_perc desc
+limit 20
+) y
+order by ffmp_perc desc;
+"
+q2 = "
+select row_number() over (order by ffmp_perc desc) id,
+       *, upper(divisionnm) div
+from (
+select divisionnm,  
+       max(divisionid) div_id,
+       max(stateab) state,
+       max(n_div) n_poll,
+       sum(n) n_ffmp,
+       100 * sum(n) / max(n_div) ffmp_perc
+from (
+select pollingplace,  
+       divisionnm,
+       divisionid,
+       stateab, 
+       partyab,
+       surname,
+       ordinaryvotes n,
+       sum(ordinaryvotes) over (partition by divisionid) n_div,
+       100 * ordinaryvotes / sum(nullif(ordinaryvotes, 0)) over (partition by divisionid) ffmp_perc       
+from polling
+) x
+where partyab in ('UAPP', 'ON', 'LDP')
+  and ffmp_perc is not null
+  and stateab = 'VIC'
+group by x.divisionnm
+order by ffmp_perc desc
+) y
+order by ffmp_perc desc;
+"
+
+t1 <- dbGetQuery(con, q1)
+t2 <- dbGetQuery(con, q2)
+```
+
+
+### Background
+
+We previously looked at the geographic distribution of voters who supported the Freedom Friendly Minor Parties (FFMPs) at the 2022 Australia federal election: United Australia Party (UAP), Pauline Hanson's One Nation (PHON), and the Liberal Democratic Party (LDP). Reviewing the aggregated first preference votes by polling place showed that there was a greater concentration of support in the following places:
+
+* South-East Queensland & regional areas in Queensland; 
+* along the coast and in regional towns of NSW;
+* some outer suburbs of Melbourne and Sydney, 1-2 suburbs in Adelaide;
+* and some regional support in Victoria.
+
+
+### Results by Electoral District
+
+Although informative, reviewing the results by polling place ([see previous post](/freedom-friendly/)) is potentially deceptive as the number of votes is not easily interpretable through the size of markers representing the geographic location of the polling places.
+When the votes are presented by electoral district (Figure 1), the results appear slightly stronger because regional areas are disproportionately emphasised visually due to their geographic coverage, i.e. the lower population density in regional areas is not reflected within the polygons of the choropleth map. Another difference is that the clustering of voting for the FFMPs along coastal areas and towns that we saw when reviewing results at the polling place level is obscured.
+
+```{r aust, echo=FALSE, fig.show='hold', out.width = "90%", fig.align = "center", fig.cap="F1. Vote (%) for Freedom Friendly Minor Parties by Electorate"}
+ggdraw() + draw_image("~/Documents/ffmp.png") 
+```
+
+Moving from polling place to federal electoral district, the greater representation of FFMP voters in south-east Queensland remains, but it's the darker shaded districts in NSW and Victoria that stand out (Figure 2). These are Gippsland (17%), Mallee (15%), Riverina (15%), Whitlam (15%), Lyne (16%).
+```{r seaust, echo=FALSE, fig.show='hold', out.width = "90%", fig.align = "center", fig.cap="F2. Vote (%) for Freedom Friendly Minor Parties in South-East Australia by Electorate"}
+ggdraw() + draw_image("~/Documents/southeast coast.png") 
+```
+In metropolitan areas (Table 1 below) the strongest results were in: the Western Sydney electorate of Werriwa at 20% support for the freedom parties; in Wright in the southern suburbs of Brisbane with 22% of votes, and the electorate of Solomon in Darwin at 19%. Adjacent to Werriwa, the electorate of McMahon had a respectable 16% of votes going to FFMPs.
+
+#### Table 1. Top 10 electoral districts by vote (%) for Freedom Friendly Minor Parties
+```{r}
+t1 %>% select(-div, -div_id) %>%
+  head(10) %>%
+  kbl("simple") #%>%
+  #kable_styling(bootstrap_options = "striped", full_width = F) 
+```
+
+### Federal Election Results in Victoria
+The freedom friendly parties have another opportunity to make headway in 2022 with a state election due for Victoria in November. Unfortunately, the Liberal party is coming from a long ways back, and one would expect that it would be difficult to dislodge the incumbents for several reasons. One, it is likely that recent covid related policies reflect popular sentiment in this state, despite Melbourne holding the claim to be the most locked down city in the world. Two, if the federal election provides an indication of voter preferences, state and federal differences in policymaking notwithstanding, labour managed to retain all their seats although the federal election did see a swing against both the labour and liberal parties. Last of all, with a maximum aggregate first preference vote <20% in Victoria, the FFMPs will have difficulty obtaining a majority within electorates while the duopoly major parties continue to preference each other.
+
+```{r melb, echo=FALSE, fig.show='hold', out.width = "90%", fig.align = "center", fig.cap="F3. Vote (%) for Freedom Friendly Minor Parties, Melbourne"}
+ggdraw() + draw_image("~/Documents/melb close.png") + 
+           draw_image("~/Documents/legend.png", scale=0.14, x= -0.38, y=-0.40)
+```
+
+Figure 3 presents the results of the federal election for the freedom friendly minor parties for Victoria. The electorates with the highest FFMP vote was 17% in Gippsland, roughly equal with Bruce and Scullin, in the south-east and northern suburbs of Melbourne respectively. As with the visualisation of the results at the polling place level, there is limited support for the FFMPs in the inner city. Table 2 below shows a list of the top 10 ranked Victorian electorates by FFMP vote.
+
+#### Table 2. Top 10 electoral districts in Victoria by vote (%) for Freedom Friendly Minor Parties
+```{r, fig.aligh='left'}
+t2 %>% select(-div, -div_id, -state) %>%
+  head(10) %>%
+  kbl("simple")
+#%>%
+#  kable_styling(bootstrap_options = "striped", full_width = F, position="left") 
+  #kable_styling(bootstrap_options = "striped", full_width = F, wraptable_width="10pt")
+  #scroll_box(width = "600px", height = "350px")
+
+```
+
+### Projection for the Victorian State Election, November 2022
+Assuming that voter preferences translate roughly from federal to state election, by overlaying the state electoral boundaries over the first preference votes data at the polling place level, we can estimate the  voter share going to the freedom friendly parties by state electorate. 
+
+From Table 3, the top 3 Victorian electoral districts by voter share going to FFMPs are: Morwell (19%), Narre Warren North (18%) and Dandenong (17%). Given that votes and geographic locations of polling places have not changed, the results for the state electoral districts largely mirror those from the federal level. The state electorates appear to be more numerous in number and have smaller geographic coverage per district. 
+
+
+
+#### Table 3. Projected Top 10 Victorian state electoral districts by vote (%) for Freedom Friendly Minor Parties using data from Federal election
+```{r eval=FALSE, fig.align="left", message=FALSE, warning=FALSE, include=FALSE}
+data <- read.csv("~/Documents/GeneralPollingPlacesDownload-27966.csv", skip = 1)
+ffmp <- read_csv("~/Documents/ffmp.csv")
+#shp <- st_read("~/Downloads//Order_PB9VOD/ll_gda94/esrishape/whole_of_dataset/victoria/VMADMIN/STATE_ASSEMBLY_2022.shp")
+shp <- rgdal::readOGR(dsn="~/Downloads//Order_PB9VOD/ll_gda94/esrishape/whole_of_dataset/victoria/VMADMIN/", layer="STATE_ASSEMBLY_2022")
+
+df <- data[!is.na(data$Longitude),]
+pts_df <- SpatialPointsDataFrame(df[c("Latitude","Longitude")], df)
+
+df2 <- df %>% left_join(ffmp, by=c("PollingPlaceNm"="pollingplace", "State"="state"))
+data2 <- data %>% left_join(ffmp, by=c("PollingPlaceNm"="pollingplace", "State"="state"))
+
+data2 <- data2 %>% filter(State == "VIC")
+
+#df %>% filter(PollingPlaceNm == "Bayswater")
+
+vdf <- data2[!is.na(data2$Latitude),]
+crs <- CRS("+init=epsg:4283")
+
+pts <- SpatialPoints(vdf[c("Longitude","Latitude")], proj4string=crs)
+spdf <- SpatialPointsDataFrame(vdf[c("Longitude","Latitude")], vdf, proj4string=crs)
+
+
+dt <- over(spdf, shp)
+
+m <- cbind(spdf, dt) 
+
+vic <- m[!is.na(m$DISTRICT),]
+
+ffmpdf <- vic@data %>% group_by(DISTRICT) %>% 
+  summarise(n_poll = sum(n_poll, na.rm=TRUE),
+            n_ffmp = sum(n, na.rm=TRUE),
+            ffmp_perc = 100 * sum(n,na.rm=TRUE)/sum(n_poll,na.rm=TRUE)) %>% 
+  data.frame() %>% arrange(-ffmp_perc)
+
+shp@data <- shp@data %>% left_join(ffmpdf, by=c("DISTRICT"="DISTRICT"))
+
+
+#ffmpdf$perc_ffmp <- ffmpdf$perc_ffmp %>% sprintf( "  %3.1f", .)
+ffmpdf$ffmp_perc <- ffmpdf$ffmp_perc %>% as.integer()
+ffmpdf$id <- row.names(ffmpdf)
+ffmpdf <- ffmpdf[c("id", "DISTRICT","n_poll","n_ffmp","ffmp_perc")]
+ffmpdf %>% head(10) %>% kbl("simple")
+write.csv(ffmpdf, "~/Documents/ffmpdf.csv", row.names=FALSE)
+```
+
+```{r}
+#gpclibPermit()
+#
+ffmpdf <- read.csv("~/Documents/ffmpdf.csv")
+ffmpdf %>% head(10) %>% kbl("simple")
+
+```
+
+The strongest results in Melbourne (Figure 4) are: a south-eastern cluster of the adjacent suburbs of Narre Warren North (17%), Narre Warren South (16%), Dandenong (17%), and Cranbourne (15%), as well as a northern cluster of Greenvale (15%), Thomastown (15%) and Mill Park (16%). A contiguous agglomeration of 2nd quantile electorates, stretching from the west to northern suburbs of Melbourne (Werribee, Tarneit, Kororoit, Sydenham, St Albans, Niddrie, Sunbury, Broadmeadows, Kalkallo & Yan Yean), separates the top quantile electorate of Lara (15%) from the northern cluster.
+
+```{r innermelbmap, echo=FALSE, fig.show='hold', out.width = "90%", fig.align = "center", fig.cap="F4. Projected Vote (%) for Freedom Friendly Minor Parties, Inner/Outer Melbourne"}
+ggdraw() + draw_image("~/Documents/melbmap.png") 
+```
+
+#### Concluding Remarks
+In addition to having different public policy areas of relevance - states have responsibility for health, education and roads, whereas the federal government has responsibility for issues like income tax, immigration - the exclusion of votes from polling places without geographic coordinates, which can largely attributed to those polling places having multiple sites, will also bias the projected state election results.
+
+The 3-term incumbents (2013 Abott, 2016 Turnbull, and 2019 Morrison) were decisively removed at the Federal election in May. It remains to be seen whether Victorians will do the same to a 2-term Andrews (2014 & 2018) government at the state level. A change in government seems less likely for the reasons mentioned earlier, and also because there is perceived weakness in the state opposition with Matthew Guy getting a second run at the election; the liberal/national coalition received 35.2% votes in the 2018 election with a 6.8% swing against it, albeit under vastly different circumstances.
+
+Will Victorian citizens hold the Andrews government to account for the current state of the health system? What is the extent of the support for the continuing expansion of the state in Victoria 2022? 
+
+#### Additional Figures
+
+For reference, Figure 5 presents a histogram of the projected FFMP results at the electorate level for the Victorian election, while Figure 6 presents the same information as a choropleth map with the electoral boundaries. 
+
+```{r hist, fig.width=5.5, fig.height=3.7}
+p1 <- ggplot(ffmpdf) + geom_histogram(aes(x=ffmp_perc), bins=20) + theme_minimal() + xlab("voter share going to FFMPs (%)")
+p2 <- ggdraw(add_sub(p1, "Freedom Friendly Minor Parties (FFMP): United Australia Party, Pauline Hanson's One Nation, \n Liberal Democratic Party", size=8))
+plot_grid(p2, labels = c('F.5'), ncol=1)
+```
+
+```{r vicmap, echo=FALSE, fig.show='hold', out.width = "90%", fig.align = "center", fig.cap="F6. Projected Vote (%) for Freedom Friendly Minor Parties, Victoria"}
+ggdraw() + draw_image("~/Documents/vicmap.png") 
+```
+
+```{css, echo=FALSE}
+table.table-condensed {
+  width: 80%;
+}
+```

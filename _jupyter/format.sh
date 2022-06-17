@@ -24,6 +24,7 @@ function rmd(){
     if [[ -d ${nb%.Rmd}_files ]]
     then
         echo "==========Moving image files=========="
+        rm -r ../assets/images/${nb%.Rmd}_files
         mv ${nb%.Rmd}_files ../assets/images/
     fi
 }
