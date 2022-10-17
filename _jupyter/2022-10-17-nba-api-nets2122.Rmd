@@ -1,0 +1,43 @@
+---
+title: "Brooklyn Nets 2021/22 season summary"
+layout: post
+categories:
+  - posts
+tags:
+  - nba, python, r markdown, sports
+output:
+  #html_document
+  md_document:
+    variant: markdown_github+backtick_code_blocks
+    preserve_yaml: true
+    toc: false
+    fig_retina: 2
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+<style>
+.html-widget {
+    margin: auto;
+}
+</style>
+
+### Revisiting NBA player data - via nba_api
+
+I'm starting to pull together some player data for the NBA 2021/22 season, and have started with the Nets.
+I didn't really follow the last season that closely, and thought that plotting a heatmap of minutes played, sorted by total minutes played, might be a handy way to presenting a summary of a season.
+
+
+
+```{r, fig.width=30, fig.height=12, fig.align = "center", fig.cap = "Heatmap of Minutes Played by Brooklyn Nets Player, 2021/2022 season"}
+library(cowplot)
+ggdraw() + draw_image("/Users/brendan/Documents/nets minutes played 2122.png")
+
+```
