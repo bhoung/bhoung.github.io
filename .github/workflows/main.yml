@@ -14,7 +14,7 @@ jobs:
           
       - name : update rubygems
         run: |
-          gem install rubygems-update
+          sudo apt install rubygems -y
           
       - uses: actions/cache@v2
         with:
