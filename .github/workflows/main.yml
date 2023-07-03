@@ -10,7 +10,11 @@ jobs:
       
       - name: Fix git safe.directory in container
         run: |
-          mkdir -p /home/runner/work/_temp/_github_home && printf "[safe]\n\tdirectory = /github/workspace" > /home/runner/work/_temp/_github_home/.gitconfig          
+          mkdir -p /home/runner/work/_temp/_github_home && printf "[safe]\n\tdirectory = /github/workspace" > /home/runner/work/_temp/_github_home/.gitconfig
+          
+      - name : update rubygems
+        run: |
+          gem install rubygems-update
           
       - uses: actions/cache@v2
         with:
