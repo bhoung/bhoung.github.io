@@ -8,10 +8,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: Set ownership
+      - name: Fix git safe.directory in container
         run: |
-          # this is to fix GIT not liking owner of the checkout dir
-          git config --global --add safe.directory /github/workspace
+          mkdir -p /home/runner/work/_temp/_github_home && printf "[safe]\n\tdirectory = /github/workspace" > /home/runner/work/_temp/_github_home/.gitconfig          
           
       - uses: actions/cache@v2
         with:
