@@ -11,7 +11,7 @@ jobs:
       - name: Set ownership
         run: |
           # this is to fix GIT not liking owner of the checkout dir
-          chown -R $(id -u):$(id -g) $PWD
+          git config --global --add safe.directory /github/workspace
           
       - uses: actions/cache@v2
         with:
@@ -19,6 +19,7 @@ jobs:
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
+            
       - name: Build & Deploy to GitHub Pages
         uses: helaili/jekyll-action@v2
         with:
