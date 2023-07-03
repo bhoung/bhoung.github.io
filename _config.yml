@@ -46,7 +46,6 @@ plugins:
   - jekyll-archives
   - jekyll-paginate
   - jekyll-sitemap
-#  - jekyll-thumbnail
 
 # Build settings
 markdown: kramdown
