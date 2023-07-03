@@ -6,9 +6,10 @@ categories:
 tags:
   - jupyter notebook
   - r markdown
-  
+
 ---
 
+<!-- excerpt-start -->
 In screencast #1, I adapt jupyter notebooks and R Markdown for jekyll static site blogs.
 
 reference: <a href="https://jaketae.github.io/blog/jupyter-automation/"> Jake Tae's blog </a>

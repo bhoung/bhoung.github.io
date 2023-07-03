@@ -10,3 +10,4 @@ Gemfile.lock
 .RHistory
 *.html~
 *yml~
+*.swp

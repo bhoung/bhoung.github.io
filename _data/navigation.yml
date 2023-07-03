@@ -2,7 +2,11 @@
 # pages in order as they should show up.
 main:
   - title: "Home"
-    url: 
+    url: /
+  - title: "NBA"
+    url: /nba
+  - title: "Archives"
+    url: /archives
   - title: "Motivation"
     url: /motivation
     

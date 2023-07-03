@@ -4,7 +4,8 @@ layout: post
 categories:
   - posts
 tags:
-  - nba, sports
+  - nba
+  - sports
 output:
    #html_document
   md_document:
@@ -14,10 +15,12 @@ output:
     fig_retina: 2
 #output: html_document
 ---
+<!-- excerpt-start -->
 
 ### histograms of margin by home/away status
 
 <img src="/assets/images/2021-10-01-playoffs-upsets_files/figure-markdown_github/unnamed-chunk-6-1.png" width="672" />
+<!-- excerpt-end -->
 
 ### margins by favourite/underdog status
 

@@ -1,5 +1,5 @@
 ---
-title: "Results by electorate for the freedom friendly parties; sneak peak at the Victorian election"
+title: Results by electorate for the freedom friendly parties; sneak peak at the Victorian election
 layout: post
 categories:
   - posts
@@ -33,6 +33,7 @@ places:
 -   some outer suburbs of Melbourne and Sydney, 1-2 suburbs in Adelaide;
 -   and some regional support in Victoria.
 
+<!-- excerpt-start -->
 ### Results by Electoral District
 
 Although informative, reviewing the results by polling place ([see
@@ -55,6 +56,7 @@ F1. Vote (%) for Freedom Friendly Minor Parties by Electorate
 </p>
 
 </div>
+<!-- excerpt-end -->
 
 Moving from polling place to federal electoral district, the greater
 representation of FFMP voters in south-east Queensland remains, but it’s

@@ -3,8 +3,8 @@
     {% assign no_comma = forloop.last %}
     {% for archive in site.archives %}
       {% if archive.type == "tag" and archive.title == tag %}
-        {{ archive.title | escape }}{% unless no_comma %},{% endunless %}
-        <!--<a href="{{ archive.url | relative_url }}">{{ archive.title | escape }}</a>{% unless no_comma %},{% endunless %}-->
+        <!--{{ archive.title | escape }}{% unless no_comma %},{% endunless %}-->
+            <a href="{{ archive.url | relative_url }}">{{ archive.title | escape }}</a>{% unless no_comma %},{% endunless %}
       {% endif %}
     {% endfor %}
   {% endfor %}

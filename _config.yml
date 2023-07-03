@@ -46,10 +46,11 @@ plugins:
   - jekyll-archives
   - jekyll-paginate
   - jekyll-sitemap
+#  - jekyll-thumbnail
 
 # Build settings
 markdown: kramdown
-excerpt_separator: "<!-- more -->"
+excerpt_separator: "<!-- excerpt-end -->"
 
 # Outputting
 permalink: /:title/
@@ -78,4 +79,3 @@ jekyll-archives:
   permalinks:
     category: /:name/
     tag: /:name/
-    

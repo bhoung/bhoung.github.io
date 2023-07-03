@@ -4,7 +4,9 @@ layout: post
 categories:
   - posts
 tags:
-  - nba, sports, r markdown
+  - nba
+  - sports
+  - r markdown
 output: 
    #html_document
   md_document:
@@ -17,9 +19,11 @@ output:
 
 Screencast #4 shows the minutes played by Nets in NBA regular season '21 against team win/loss and margin.
 
+<!-- excerpt-start -->
 code: <a href="https://gist.github.com/bhoung/406879882f21de87283ae2380a1994df"> https://gist.github.com/bhoung/406879882f21de87283ae2380a1994df </a>
 
 <a href="https://www.youtube.com/watch?v=Zdrv0gmIp90"> <img src="/assets/images/sc4.jpeg" alt="drawing" width="600"/>  </a>
+<!-- excerpt-end -->
 <br>
 <b>link to YouTube screencast #4 (2021-06-19) <a href="https://www.youtube.com/watch?v=Zdrv0gmIp90"> here </a> </b>
 

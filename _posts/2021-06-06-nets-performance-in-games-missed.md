@@ -19,10 +19,13 @@ output:
 In sceencast #2 I ask how the Nets performed in the regular NBA season depending on how many of their
 stars played. 
 
+<!-- excerpt-start -->
 code: <a href="https://gist.github.com/bhoung/769ea023915bc7f6802f667249b54508"> https://gist.github.com/bhoung/769ea023915bc7f6802f667249b54508 </a>
 
-<b>link to YouTube screencast #2 <a href="https://www.youtube.com/watch?v=AM-sty4wSKo"> here </a> </b>
 <a href="https://www.youtube.com/watch?v=AM-sty4wSKo"> <img src="/assets/images/sc2.jpeg" alt="drawing" width="600"/>  </a>
+<!-- excerpt-end -->
+
+<b>link to YouTube screencast #2 <a href="https://www.youtube.com/watch?v=AM-sty4wSKo"> here </a> </b>
 <br>
 
 

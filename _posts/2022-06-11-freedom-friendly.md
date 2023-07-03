@@ -1,5 +1,5 @@
 ---
-title: "Where was the support for the freedom friendly minor parties geographically?"
+title: Where was the support for the freedom friendly minor parties geographically?
 layout: post
 categories:
   - posts
@@ -90,6 +90,7 @@ polling places, as they are indicative of broader state level trends.
 | Swayneville              | STANTON       | Capricornia | QLD   | 329    | 111    | 33       |
 | Perth Airport BRAND PPVC | TAYLOR        | Brand       | WA    | 65     | 22     | 33       |
 | EAV Flynn PPVC           | WIEDEN        | Flynn       | QLD   | 12     | 4      | 33       |
+<!-- excerpt-start -->
 
 ### The Disappointment that is Melbourne
 
@@ -122,6 +123,7 @@ Victoria at Polling Places
 </div>
 
 </center>
+<!-- excerpt-end -->
 
 > ***NOTE:*** click through or download and open the
 > [html](../assets/images/2022-06-11-freedom-friendly.html) version of
