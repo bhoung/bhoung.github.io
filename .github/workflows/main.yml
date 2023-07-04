@@ -12,11 +12,6 @@ jobs:
         run: |
           mkdir -p /home/runner/work/_temp/_github_home && printf "[safe]\n\tdirectory = /github/workspace" > /home/runner/work/_temp/_github_home/.gitconfig
           
-      - name : update rubygems
-        run: |
-          sudo gem install rubygems-update
-          sudo update_rubygems
-          
       - uses: actions/cache@v2
         with:
           path: vendor/bundle
@@ -25,6 +20,6 @@ jobs:
             ${{ runner.os }}-gems-
             
       - name: Build & Deploy to GitHub Pages
-        uses: helaili/jekyll-action@v2.5
+        uses: helaili/jekyll-action@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
