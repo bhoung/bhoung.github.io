@@ -52,7 +52,7 @@ markdown: kramdown
 excerpt_separator: "<!-- excerpt-end -->"
 
 # Outputting
-permalink: /:title/
+permalink: /:title
 paginate_path: /posts/:num/
 paginate: 5
 

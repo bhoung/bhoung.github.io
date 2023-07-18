@@ -90,6 +90,7 @@ polling places, as they are indicative of broader state level trends.
 | Swayneville              | STANTON       | Capricornia | QLD   | 329    | 111    | 33       |
 | Perth Airport BRAND PPVC | TAYLOR        | Brand       | WA    | 65     | 22     | 33       |
 | EAV Flynn PPVC           | WIEDEN        | Flynn       | QLD   | 12     | 4      | 33       |
+
 <!-- excerpt-start -->
 
 ### The Disappointment that is Melbourne
