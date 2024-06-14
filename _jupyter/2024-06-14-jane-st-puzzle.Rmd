@@ -1,0 +1,40 @@
+---
+title: "Hooks 10 Puzzle"
+layout: post
+categories:
+  - posts
+tags:
+  - random
+output:
+  #html_document
+  md_document:
+    variant: markdown_github+backtick_code_blocks
+    preserve_yaml: true
+    toc: false
+    fig_retina: 2
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+<style>
+.html-widget {
+    margin: auto;
+}
+</style>
+
+Documenting a little puzzle from Jane St I completed in March, 2024. 
+
+https://www.janestreet.com/puzzles/hooks-10-index/
+
+```{r}
+library(ggplot2)
+library(cowplot)
+ggdraw() + draw_image("~/Documents/hooks10.jpg") 
+```

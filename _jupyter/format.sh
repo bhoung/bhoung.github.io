@@ -19,7 +19,7 @@ function rmd(){
     #eval "$(conda shell.bash hook)"
     #conda activate R
     R -e "rmarkdown::render('$nb')"
-    python3 format.py "-r" ${nb%.Rmd}.md
+    python3.9 format.py "-r" ${nb%.Rmd}.md
     mv ${nb%.Rmd}.md ../_posts/
     if [[ -d ${nb%.Rmd}_files ]]
     then
