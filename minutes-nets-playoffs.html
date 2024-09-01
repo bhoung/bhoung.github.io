@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-site-verification" content="NRV_s2OxsLZbYJxcMjzaVB1ReV1ISssIqlgw1mQ5-Dc" />
+  
+  
+  
+  <title>Minutes played by Nets, playoffs</title>
+  <meta name="description" content="This notebook shows the minutes played by starters and bench Nets players in their two playoff series. The hypothesis for looking at minutes played is that: did the cumulative effect of the number of minutes played by K. Durant lead to his fatigue (which could be measured by something like shooting percentage) in game 7 of the second series? This analysis only looks on the minutes played side of the relationship, whereas a measure of player performance would also be required to answer the question of fatigue.">
+  
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="https://bhoung.github.io/minutes-nets-playoffs">
+  
+  
+  <link rel="alternate" type="application/rss+xml" title="Brendan Houng" href="https://bhoung.github.io/feed.xml">
+
+  
+
+  
+  <meta property="og:title" content="Minutes played by Nets, playoffs">
+  <meta property="og:site_name" content="Brendan Houng">
+  <meta property="og:url" content="https://bhoung.github.io/minutes-nets-playoffs">
+  <meta property="og:description" content="This notebook shows the minutes played by starters and bench Nets players in their two playoff series. The hypothesis for looking at minutes played is that: did the cumulative effect of the number of minutes played by K. Durant lead to his fatigue (which could be measured by something like shooting percentage) in game 7 of the second series? This analysis only looks on the minutes played side of the relationship, whereas a measure of player performance would also be required to answer the question of fatigue.">
+  
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="brendanhoung">
+  <meta name="twitter:title" content="Minutes played by Nets, playoffs">
+  <meta name="twitter:description" content="This notebook shows the minutes played by starters and bench Nets players in their two playoff series. The hypothesis for looking at minutes played is that: did the cumulative effect of the number ...">
+  
+    <meta name="twitter:creator" content="brendanhoung">
+  
+  
+
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K8E1H5452W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K8E1H5452W');
+  </script>
+
+
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Brendan Houng</a>
+
+    <nav class="site-nav">
+      
+        
+        <a class="page-link" href="/">Home</a>
+      
+        
+        <a class="page-link" href="/nba">NBA</a>
+      
+        
+        <a class="page-link" href="/archives">Archives</a>
+      
+        
+        <a class="page-link" href="/motivation">Motivation</a>
+      
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    
+      <h1 class="post-title" itemprop="name headline">Minutes played by Nets, playoffs</h1>
+    
+    <p class="post-meta"><time datetime="2021-06-25T00:00:00+00:00" itemprop="datePublished">Jun 25, 2021</time>
+    <!-- •
+  
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        <a href="/posts/">posts</a>
+      
+    
+      
+    
+      
+    
+  
+
+-->
+    </p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>This notebook shows the minutes played by starters and bench Nets players in their two playoff series.</p>
+
+<p>The hypothesis for looking at minutes played is that: did the cumulative effect of the number of minutes played by K. Durant lead to his fatigue
+(which could be measured by something like shooting percentage) in game 7 of the second series?</p>
+
+<p>This analysis only looks on the minutes played side of the relationship, whereas a measure of player performance would also be required to answer the question of fatigue. 
+<!-- excerpt-start --></p>
+
+<p><a href="https://www.youtube.com/watch?v=m1rjFERnDWo"> <img src="/assets/images/sc5.jpeg" alt="drawing" width="600" />  </a></p>
+
+<!-- excerpt-end -->
+
+<p>code: <a href="https://gist.github.com/bhoung/3833c6afa438296c6c6dfe8964d20da7"> https://gist.github.com/bhoung/3833c6afa438296c6c6dfe8964d20da7 </a></p>
+
+<p><br />
+<b>link to YouTube screencast #5 (2021-06-25) <a href="https://www.youtube.com/watch?v=m1rjFERnDWo"> here </a> </b></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## brownbr01 claxtni01 duranke01 greenje02 griffbl01 hardeja01 harrijo01 irvinky01 
+##        12        12        12        12        12        12        12        12 
+## jamesmi02 johnsty01 shamela01 
+##        12        12        12
+</code></pre></div></div>
+
+<p><img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-1.png" width="672" />
+<img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-2.png" width="672" />
+<img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-3.png" width="672" />
+<img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-4.png" width="672" />
+<img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-5.png" width="672" />
+<img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-6.png" width="672" />
+<img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-7.png" width="672" />
+<img src="/assets/images/2021-06-25-minutes-nets-playoffs_files/figure-markdown_github/unnamed-chunk-13-8.png" width="672" /></p>
+
+<p>References:</p>
+
+<p><a href="https://stackoverflow.com/questions/40616357/how-to-scrape-tables-inside-a-comment-tag-in-html-with-r">https://stackoverflow.com/questions/40616357/how-to-scrape-tables-inside-a-comment-tag-in-html-with-r</a></p>
+
+<p><a href="https://stackoverflow.com/questions/49057868/extracting-text-within-tags-inside-html-comments-with-beautifulsoup">https://stackoverflow.com/questions/49057868/extracting-text-within-tags-inside-html-comments-with-beautifulsoup</a></p>
+
+  </div>
+
+  
+    <div class="post-comments" itemprop="comment">
+      <hr />
+<script
+  async
+  src="https://utteranc.es/client.js"
+  repo="bhoung/bhoung.github.io"
+  issue-term="title"
+  theme="github-light"
+  crossorigin="anonymous"
+></script>
+    </div>
+  
+
+</article>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <p>
+      
+
+&copy; Brendan Houng - Powered by <a href="https://jekyllrb.com">Jekyll</a> &amp; <a href="https://github.com/yous/whiteglass">whiteglass</a> - Subscribe via <a href="https://bhoung.github.io/feed.xml">RSS</a>
+<br>
+<br>
+<a href="https://github.com/bhoung/"> github </a>
+
+
+
+    </p>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

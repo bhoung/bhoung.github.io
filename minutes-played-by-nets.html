@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-site-verification" content="NRV_s2OxsLZbYJxcMjzaVB1ReV1ISssIqlgw1mQ5-Dc" />
+  
+  
+  
+  <title>Minutes played by Nets, regular season</title>
+  <meta name="description" content="Screencast #4 shows the minutes played by Nets in NBA regular season ‘21 against team win/loss and margin. code: https://gist.github.com/bhoung/406879882f21de87283ae2380a1994df">
+  
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="https://bhoung.github.io/minutes-played-by-nets">
+  
+  
+  <link rel="alternate" type="application/rss+xml" title="Brendan Houng" href="https://bhoung.github.io/feed.xml">
+
+  
+
+  
+  <meta property="og:title" content="Minutes played by Nets, regular season">
+  <meta property="og:site_name" content="Brendan Houng">
+  <meta property="og:url" content="https://bhoung.github.io/minutes-played-by-nets">
+  <meta property="og:description" content="Screencast #4 shows the minutes played by Nets in NBA regular season ‘21 against team win/loss and margin. code: https://gist.github.com/bhoung/406879882f21de87283ae2380a1994df">
+  
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="brendanhoung">
+  <meta name="twitter:title" content="Minutes played by Nets, regular season">
+  <meta name="twitter:description" content="Screencast #4 shows the minutes played by Nets in NBA regular season ‘21 against team win/loss and margin. code: https://gist.github.com/bhoung/406879882f21de87283ae2380a1994df">
+  
+    <meta name="twitter:creator" content="brendanhoung">
+  
+  
+
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K8E1H5452W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K8E1H5452W');
+  </script>
+
+
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Brendan Houng</a>
+
+    <nav class="site-nav">
+      
+        
+        <a class="page-link" href="/">Home</a>
+      
+        
+        <a class="page-link" href="/nba">NBA</a>
+      
+        
+        <a class="page-link" href="/archives">Archives</a>
+      
+        
+        <a class="page-link" href="/motivation">Motivation</a>
+      
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    
+      <h1 class="post-title" itemprop="name headline">Minutes played by Nets, regular season</h1>
+    
+    <p class="post-meta"><time datetime="2021-06-19T00:00:00+00:00" itemprop="datePublished">Jun 19, 2021</time>
+    <!-- •
+  
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        <a href="/posts/">posts</a>
+      
+    
+      
+    
+      
+    
+  
+
+-->
+    </p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Screencast #4 shows the minutes played by Nets in NBA regular season ‘21 against team win/loss and margin.</p>
+
+<!-- excerpt-start -->
+<p>code: <a href="https://gist.github.com/bhoung/406879882f21de87283ae2380a1994df"> https://gist.github.com/bhoung/406879882f21de87283ae2380a1994df </a></p>
+
+<p><a href="https://www.youtube.com/watch?v=Zdrv0gmIp90"> <img src="/assets/images/sc4.jpeg" alt="drawing" width="600" />  </a>
+<!-- excerpt-end -->
+<br />
+<b>link to YouTube screencast #4 (2021-06-19) <a href="https://www.youtube.com/watch?v=Zdrv0gmIp90"> here </a> </b></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">roster</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"https://www.basketball-reference.com/teams/BRK/2021.html"</span><span class="w">
+
+</span><span class="n">html</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read_html</span><span class="p">(</span><span class="n">roster</span><span class="p">)</span><span class="w">
+</span><span class="n">tables</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">html</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">html_nodes</span><span class="p">(</span><span class="s2">"table"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">html_table</span><span class="p">()</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tables</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">data.frame</span><span class="p">()</span><span class="w">
+
+</span><span class="n">players</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">html</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">html_nodes</span><span class="p">(</span><span class="s2">"table"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">xml_find_all</span><span class="p">(</span><span class="s2">".//a"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">xml_attrs</span><span class="p">()</span><span class="w">
+</span><span class="n">gamelogs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">unlist</span><span class="p">(</span><span class="n">players</span><span class="p">)</span><span class="w">
+</span><span class="n">pgl</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">gamelogs</span><span class="p">[</span><span class="n">grep</span><span class="p">(</span><span class="s2">"gamelog"</span><span class="p">,</span><span class="w"> </span><span class="n">gamelogs</span><span class="p">)]</span><span class="w">  </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">unique</span><span class="p">()</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="nf">list</span><span class="p">()</span><span class="w"> 
+</span><span class="n">pgl</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">pgl</span><span class="p">[[</span><span class="m">1</span><span class="p">]]</span><span class="w">
+
+</span><span class="n">playoffs_pl</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">pgl</span><span class="p">[</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">6</span><span class="p">,</span><span class="m">9</span><span class="p">,</span><span class="m">10</span><span class="p">,</span><span class="m">14</span><span class="p">,</span><span class="m">12</span><span class="p">,</span><span class="m">15</span><span class="p">,</span><span class="m">18</span><span class="p">)]</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">get_player_url</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">paste</span><span class="p">(</span><span class="s2">"https://www.basketball-reference.com/"</span><span class="p">,</span><span class="n">path</span><span class="p">,</span><span class="n">sep</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="n">player_urls</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">unlist</span><span class="p">(</span><span class="n">lapply</span><span class="p">(</span><span class="n">FUN</span><span class="o">=</span><span class="n">get_player_url</span><span class="p">,</span><span class="w"> </span><span class="n">playoffs_pl</span><span class="p">))</span><span class="w">
+
+</span><span class="n">get_data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">player_url</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">html</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read_html</span><span class="p">(</span><span class="n">player_url</span><span class="p">)</span><span class="w">
+  </span><span class="n">tables</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">html</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">html_nodes</span><span class="p">(</span><span class="s2">"table"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">html_table</span><span class="p">()</span><span class="w">
+  </span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tables</span><span class="p">[</span><span class="m">8</span><span class="p">]</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">data.frame</span><span class="p">()</span><span class="w">
+  </span><span class="nf">return</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">player_urls</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+   </span><span class="n">pname</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">str_split</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="s2">"/"</span><span class="p">)[[</span><span class="m">1</span><span class="p">]][</span><span class="m">7</span><span class="p">]</span><span class="w">
+   </span><span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_data</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="w">
+   </span><span class="n">assign</span><span class="p">(</span><span class="n">pname</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> 
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plist</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">()</span><span class="w">
+</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">player_urls</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+   </span><span class="n">pname</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">str_split</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="s2">"/"</span><span class="p">)[[</span><span class="m">1</span><span class="p">]][</span><span class="m">7</span><span class="p">]</span><span class="w">
+   </span><span class="n">plist</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">plist</span><span class="p">,</span><span class="w"> </span><span class="n">pname</span><span class="p">)</span><span class="w">   </span><span class="c1"># Add element to list</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="n">unlist</span><span class="p">(</span><span class="n">plist</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##  [1] "hardeja01" "irvinky01" "duranke01" "harrijo01" "greenje02" "shamela01"
+##  [7] "brownbr01" "claxtni01" "griffbl01" "jamesmi02" "johnsty01"
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">plist</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  
+  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="w">
+      </span><span class="n">data</span><span class="o">$</span><span class="n">player</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">p</span><span class="w">
+        
+  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">df</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="w">
+      </span><span class="n">df</span><span class="o">$</span><span class="n">player</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">p</span><span class="w">
+      </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rbind</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w"> 
+  </span><span class="p">}</span><span class="w">
+  </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">table</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">player</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## brownbr01 claxtni01 duranke01 greenje02 griffbl01 hardeja01 harrijo01 irvinky01 
+##        75        75        75        75        74        71        75        75 
+## jamesmi02 johnsty01 shamela01 
+##        13        75        75
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">data</span><span class="o">$</span><span class="n">date</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.Date</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">Date</span><span class="p">,</span><span class="w"> </span><span class="n">format</span><span class="o">=</span><span class="s2">"%Y-%m-%d"</span><span class="p">)</span><span class="w">
+</span><span class="n">dfm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">games</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">left_join</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s2">"date"</span><span class="o">=</span><span class="s2">"date"</span><span class="p">))</span><span class="w">
+
+</span><span class="n">mp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dfm</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">select</span><span class="p">(</span><span class="n">date</span><span class="p">,</span><span class="w"> </span><span class="n">MP</span><span class="p">,</span><span class="w"> </span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">WinLoss</span><span class="p">,</span><span class="w"> </span><span class="n">diff</span><span class="p">)</span><span class="w">
+</span><span class="n">mp</span><span class="o">$</span><span class="n">min</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.difftime</span><span class="p">(</span><span class="n">mp</span><span class="o">$</span><span class="n">MP</span><span class="p">,</span><span class="w"> </span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"%M:%S"</span><span class="p">,</span><span class="w"> </span><span class="n">units</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"mins"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">mp</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">player</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_point</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">date</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">min</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="o">=</span><span class="n">player</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">facet_grid</span><span class="p">(</span><span class="n">WinLoss</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">theme_cowplot</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/2021-06-19-nba-21-bbr_files/figure-markdown_github/unnamed-chunk-11-1.png" width="672" alt="minutes played/win loss" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mp</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">player</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_point</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">date</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">min</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="o">=</span><span class="n">player</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">facet_grid</span><span class="p">(</span><span class="n">player</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">theme_cowplot</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">labs</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s2">"minutes played"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/2021-06-19-nba-21-bbr_files/figure-markdown_github/unnamed-chunk-11-2.png" width="672" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">p1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mp</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">WinLoss</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"W"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_point</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">date</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">min</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="o">=</span><span class="n">player</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">facet_grid</span><span class="p">(</span><span class="n">player</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">theme_cowplot</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">theme</span><span class="p">(</span><span class="n">legend.position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"none"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">labs</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s2">"minutes played"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">p2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mp</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">WinLoss</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"L"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_point</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">date</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">min</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="o">=</span><span class="n">player</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">facet_grid</span><span class="p">(</span><span class="n">player</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">theme_cowplot</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">theme</span><span class="p">(</span><span class="n">legend.position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"none"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">labs</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s2">"minutes played"</span><span class="p">)</span><span class="w">
+
+
+</span><span class="n">plot_grid</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="w"> </span><span class="n">p2</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/2021-06-19-nba-21-bbr_files/figure-markdown_github/unnamed-chunk-11-3.png" width="672" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mp</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">player</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_point</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">date</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">min</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="o">=</span><span class="n">WinLoss</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">facet_grid</span><span class="p">(</span><span class="n">player</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">theme_cowplot</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/2021-06-19-nba-21-bbr_files/figure-markdown_github/unnamed-chunk-11-4.png" width="672" /></p>
+
+  </div>
+
+  
+    <div class="post-comments" itemprop="comment">
+      <hr />
+<script
+  async
+  src="https://utteranc.es/client.js"
+  repo="bhoung/bhoung.github.io"
+  issue-term="title"
+  theme="github-light"
+  crossorigin="anonymous"
+></script>
+    </div>
+  
+
+</article>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <p>
+      
+
+&copy; Brendan Houng - Powered by <a href="https://jekyllrb.com">Jekyll</a> &amp; <a href="https://github.com/yous/whiteglass">whiteglass</a> - Subscribe via <a href="https://bhoung.github.io/feed.xml">RSS</a>
+<br>
+<br>
+<a href="https://github.com/bhoung/"> github </a>
+
+
+
+    </p>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

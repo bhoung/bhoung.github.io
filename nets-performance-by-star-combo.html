@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-site-verification" content="NRV_s2OxsLZbYJxcMjzaVB1ReV1ISssIqlgw1mQ5-Dc" />
+  
+  
+  
+  <title>Nets performance by star combo</title>
+  <meta name="description" content="In screencast #3, which builds on #2 , I plot the Nets team performance by the combination of stars that take the court in ‘21 NBA regular season. code: https://gist.github.com/bhoung/769ea023915bc7f6802f667249b54508">
+  
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="https://bhoung.github.io/nets-performance-by-star-combo">
+  
+  
+  <link rel="alternate" type="application/rss+xml" title="Brendan Houng" href="https://bhoung.github.io/feed.xml">
+
+  
+
+  
+  <meta property="og:title" content="Nets performance by star combo">
+  <meta property="og:site_name" content="Brendan Houng">
+  <meta property="og:url" content="https://bhoung.github.io/nets-performance-by-star-combo">
+  <meta property="og:description" content="In screencast #3, which builds on #2 , I plot the Nets team performance by the combination of stars that take the court in ‘21 NBA regular season. code: https://gist.github.com/bhoung/769ea023915bc7f6802f667249b54508">
+  
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="brendanhoung">
+  <meta name="twitter:title" content="Nets performance by star combo">
+  <meta name="twitter:description" content="In screencast #3, which builds on #2 , I plot the Nets team performance by the combination of stars that take the court in ‘21 NBA regular season. code: https://gist.github.com/bhoung/769ea023915bc...">
+  
+    <meta name="twitter:creator" content="brendanhoung">
+  
+  
+
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K8E1H5452W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K8E1H5452W');
+  </script>
+
+
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Brendan Houng</a>
+
+    <nav class="site-nav">
+      
+        
+        <a class="page-link" href="/">Home</a>
+      
+        
+        <a class="page-link" href="/nba">NBA</a>
+      
+        
+        <a class="page-link" href="/archives">Archives</a>
+      
+        
+        <a class="page-link" href="/motivation">Motivation</a>
+      
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    
+      <h1 class="post-title" itemprop="name headline">Nets performance by star combo</h1>
+    
+    <p class="post-meta"><time datetime="2021-06-17T00:00:00+00:00" itemprop="datePublished">Jun 17, 2021</time>
+    <!-- •
+  
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        <a href="/posts/">posts</a>
+      
+    
+      
+    
+      
+    
+  
+
+-->
+    </p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>In screencast #3, which builds on <a href="/nets-performance-in-games-missed/">#2 </a>
+, I plot the Nets team performance by the combination of stars that take the court in ‘21 NBA regular season.</p>
+
+<!-- excerpt-start -->
+<p>code: <a href="https://gist.github.com/bhoung/769ea023915bc7f6802f667249b54508"> https://gist.github.com/bhoung/769ea023915bc7f6802f667249b54508 </a></p>
+
+<p><a href="https://youtu.be/ccpVqk9KUsU"> <img src="/assets/images/sc3.jpeg" alt="drawing" width="600" />  </a>
+<!-- excerpt-end -->
+<br />
+<b>link to YouTube screencast #4 (2021-06-17) <a href="https://www.youtube.com/watch?v=ccpVqk9KUsU"> here </a></b></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dfm</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">group_by</span><span class="p">(</span><span class="n">N_stars</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">summarise</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">diff</span><span class="p">),</span><span class="w"> </span><span class="n">sd</span><span class="p">(</span><span class="n">diff</span><span class="p">),</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">diff</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## # A tibble: 5 x 4
+##   N_stars `mean(diff)` `sd(diff)` `length(diff)`
+##     &lt;int&gt;        &lt;dbl&gt;      &lt;dbl&gt;          &lt;int&gt;
+## 1       0        -6          17.0              4
+## 2       1         2.44       13.8             18
+## 3       2         7.43       12.5             35
+## 4       3         2.93       13.1             15
+## 5      NA        NA          NA                3
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dfm</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">group_by</span><span class="p">(</span><span class="n">star_combo</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">summarise</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">diff</span><span class="p">),</span><span class="w"> </span><span class="n">sd</span><span class="p">(</span><span class="n">diff</span><span class="p">),</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">diff</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## # A tibble: 9 x 4
+##   star_combo `mean(diff)` `sd(diff)` `length(diff)`
+##   &lt;chr&gt;             &lt;dbl&gt;      &lt;dbl&gt;          &lt;int&gt;
+## 1 ""               -6          17.0               4
+## 2 "D"              19.7         9.29              3
+## 3 "H"              -2.83       12.0               6
+## 4 "HD"              1.8         8.53              5
+## 5 "I"               0.222      12.6               9
+## 6 "ID"              6.75       13.0              12
+## 7 "IH"              9.44       13.0              18
+## 8 "IHD"             2.93       13.1              15
+## 9  &lt;NA&gt;            NA          NA                 3
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dfm</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_point</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">diff</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="n">date</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">facet_wrap</span><span class="p">(</span><span class="n">.</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">star_combo</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_smooth</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">date</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">diff</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">theme_cowplot</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/2021-06-17-nba-21-bbr_files/figure-markdown_github/unnamed-chunk-10-2.png" width="672" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dfm</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_histogram</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">diff</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="o">=</span><span class="n">star_combo</span><span class="p">),</span><span class="w"> </span><span class="n">binwidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">facet_wrap</span><span class="p">(</span><span class="n">.</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">star_combo</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">theme_cowplot</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">labs</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">"margin"</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="s2">"#games"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/2021-06-17-nba-21-bbr_files/figure-markdown_github/unnamed-chunk-11-1.png" width="672" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dfm</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">.</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_density</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">diff</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="o">=</span><span class="n">star_combo</span><span class="p">),</span><span class="w"> </span><span class="n">binwidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">facet_wrap</span><span class="p">(</span><span class="n">.</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">star_combo</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">theme_cowplot</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">labs</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">"margin"</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="s2">"#games"</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="o">=</span><span class="s2">"Star Combo"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/2021-06-17-nba-21-bbr_files/figure-markdown_github/unnamed-chunk-12-1.png" width="672" /></p>
+
+  </div>
+
+  
+    <div class="post-comments" itemprop="comment">
+      <hr />
+<script
+  async
+  src="https://utteranc.es/client.js"
+  repo="bhoung/bhoung.github.io"
+  issue-term="title"
+  theme="github-light"
+  crossorigin="anonymous"
+></script>
+    </div>
+  
+
+</article>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <p>
+      
+
+&copy; Brendan Houng - Powered by <a href="https://jekyllrb.com">Jekyll</a> &amp; <a href="https://github.com/yous/whiteglass">whiteglass</a> - Subscribe via <a href="https://bhoung.github.io/feed.xml">RSS</a>
+<br>
+<br>
+<a href="https://github.com/bhoung/"> github </a>
+
+
+
+    </p>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
